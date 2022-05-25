@@ -9,6 +9,7 @@ import {
 } from './pages/authentication';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { HomePage } from './pages/dashboard/HomePage';
+import { NotificationPage } from './pages/dashboard/NotificationPage';
 import { NoMatchPage } from './pages/NoMatchPage';
 import { VerifyUserPage } from './pages/verification/VerifyUserPage';
 import { useAppDispatch } from './_state/hooks';
@@ -32,7 +33,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path='verify' element={<VerifyUserPage />} />
         {/* <Route path='discover' element={<DiscoverPage />} /> */}
-        {/* <Route path='notifications' element={<NotificationPage />} /> */}
+        <Route path='notifications' element={<NotificationPage />} />
         {/* <Route path='profile' element={<ProfilePage />} /> */}
       </Route>
       <Route path='login' element={<LoginPage />} />
