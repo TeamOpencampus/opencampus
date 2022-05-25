@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import { auth } from "./firebase";
+import { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { auth } from './firebase';
 import {
   ActionPage,
   LoginPage,
@@ -30,19 +30,19 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<DashboardPage />}>
+      <Route path='/' element={<DashboardPage />}>
         <Route index element={<HomePage />} />
-        <Route path="verify" element={<VerifyUserPage />} />
-        <Route path="job-feed" element={<JobFeedPage />} />
+        <Route path='verify' element={<VerifyUserPage />} />
+        <Route path='job-feed' element={<JobFeedPage />} />
         {/* <Route path='discover' element={<DiscoverPage />} /> */}
         <Route path='notifications' element={<NotificationPage />} />
         {/* <Route path='profile' element={<ProfilePage />} /> */}
       </Route>
-      <Route path="login" element={<LoginPage />} />
-      <Route path="signup" element={<SignupPage />} />
-      <Route path="reset" element={<ResetPage />} />
-      <Route path="__action" element={<ActionPage />} />
-      <Route path="*" element={<NoMatchPage />} />
+      <Route path='login' element={<LoginPage />} />
+      <Route path='signup' element={<SignupPage />} />
+      <Route path='reset' element={<ResetPage />} />
+      <Route path='__action' element={<ActionPage />} />
+      <Route path='*' element={<NoMatchPage />} />
     </Routes>
   );
 }
