@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="72.14637mm"
+   height="10.170551mm"
+   viewBox="0 0 72.14637 10.170551"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter87875"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 1 "
+         id="feColorMatrix87849" />
+      <feColorMatrix
+         type="saturate"
+         values="0"
+         result="result1"
+         id="feColorMatrix87851" />
+      <feFlood
+         flood-color="rgb(9,111,151)"
+         result="result2"
+         id="feFlood87853" />
+      <feColorMatrix
+         type="hueRotate"
+         values="0"
+         result="result3"
+         id="feColorMatrix87855" />
+      <feBlend
+         in2="result1"
+         mode="screen"
+         result="result2"
+         id="feBlend87857" />
+      <feBlend
+         in2="result2"
+         result="result4"
+         mode="multiply"
+         id="feBlend87859" />
+      <feTurbulence
+         numOctaves="5"
+         baseFrequency="0.035"
+         type="fractalNoise"
+         result="result7"
+         id="feTurbulence87861" />
+      <feColorMatrix
+         result="result0"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 3 -1 "
+         id="feColorMatrix87863" />
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(200,57,93)"
+         result="result1"
+         id="feFlood87865" />
+      <feBlend
+         in2="result4"
+         mode="lighten"
+         in="result1"
+         result="result5"
+         id="feBlend87867" />
+      <feComposite
+         in2="result0"
+         operator="out"
+         result="result6"
+         id="feComposite87869" />
+      <feComposite
+         in2="result4"
+         operator="atop"
+         result="result8"
+         id="feComposite87871" />
+      <feComposite
+         in2="SourceGraphic"
+         operator="in"
+         id="feComposite87873" />
+    </filter>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-31.349136,-91.057388)">
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:'Josefin Sans';-inkscape-font-specification:'Josefin Sans';stroke-width:0.264583;filter:url(#filter87875)"
+       x="30.290806"
+       y="99.079529"
+       id="text20581"><tspan
+         id="tspan20579"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-family:'Josefin Sans';-inkscape-font-specification:'Josefin Sans Semi-Bold';stroke-width:0.264583"
+         x="30.290806"
+         y="99.079529"><tspan
+           style="fill:#001d6e;fill-opacity:1"
+           id="tspan63867">[</tspan><tspan
+           style="fill:#570a57;fill-opacity:1"
+           id="tspan35397">Open</tspan><tspan
+           style="fill:#112b3c;fill-opacity:1"
+           id="tspan38083">Campus</tspan><tspan
+           style="fill:#001d6e;fill-opacity:1"
+           id="tspan66539">]</tspan></tspan></text>
+  </g>
+</svg>
