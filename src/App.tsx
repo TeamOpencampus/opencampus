@@ -10,6 +10,7 @@ import {
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { HomePage } from './pages/dashboard/HomePage';
 import { NotificationPage } from './pages/dashboard/NotificationPage';
+import { JobFeedPage } from './pages/dashboard/JobFeedPage';
 import { NoMatchPage } from './pages/NoMatchPage';
 import { VerifyUserPage } from './pages/verification/VerifyUserPage';
 import { useAppDispatch } from './_state/hooks';
@@ -32,6 +33,7 @@ function App() {
       <Route path='/' element={<DashboardPage />}>
         <Route index element={<HomePage />} />
         <Route path='verify' element={<VerifyUserPage />} />
+        <Route path='job-feed' element={<JobFeedPage />} />
         {/* <Route path='discover' element={<DiscoverPage />} /> */}
         <Route path='notifications' element={<NotificationPage />} />
         {/* <Route path='profile' element={<ProfilePage />} /> */}
