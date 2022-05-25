@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "github.vscode-pull-request-github",
+    "esbenp.prettier-vscode",
+    "burkeholland.simple-react-snippets",
+    "christian-kohler.path-intellisense"
+  ]
+}
