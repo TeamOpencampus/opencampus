@@ -134,7 +134,15 @@ function SideBar({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <Button w='full' colorScheme='blue'>
+            <Button
+              variant='outline'
+              width='full'
+              colorScheme='blue'
+              leftIcon={
+                <span className='material-symbols-outlined'>logout</span>
+              }
+              onClick={actions.logOut}
+            >
               Log Out
             </Button>
           </DrawerFooter>
