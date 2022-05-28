@@ -1,6 +1,17 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuthActions } from '../../_actions/auth.action';
+import { Icon } from '../../_components/Icon';
 import { RequireAuth } from '../../_components/RequireAuth';
 
 export function DashboardPage() {
@@ -13,7 +24,7 @@ export function DashboardPage() {
         {/* Sidebar */}
         <SideBar />
         {/* Content */}
-        <Box ml='60' mt='16' p='4'>
+        <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
           <Outlet />
         </Box>
       </>
@@ -34,56 +45,79 @@ function TopBar() {
       borderBottomColor='gray.200'
       shadow='sm'
       px='4'
+      display={['block', 'none']}
     >
       <Box>Heading</Box>
     </HStack>
   );
 }
 
-const NavLinks: { label: string; icon: string; path: string }[] = [
-  { icon: 'dashboard', label: 'Home', path: '/' },
-  { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
-  { icon: 'chat', label: 'Messages', path: '/messages' },
-  { icon: 'notifications', label: 'Notifications', path: '/notifications' },
-  { icon: 'account_circle', label: 'My Profile', path: '/profile' },
-];
-
 function SideBar() {
+  const actions = useAuthActions();
+  const NavLinks: { label: string; icon: string; path: string }[] = [
+    { icon: 'home', label: 'Home', path: '/' },
+    { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
+    { icon: 'chat', label: 'Messages', path: '/messages' },
+    { icon: 'notifications', label: 'Notifications', path: '/notifications' },
+    { icon: 'settings', label: 'Settings', path: '/settings' },
+  ];
   return (
     <VStack
+      display={['none', 'block']}
       pos='fixed'
       top='0'
       left='0'
-      mt='16'
-      w='60'
+      mt='0px'
+      w={{ base: '48', md: '52', lg: '60' }}
       h='100vh'
-      bg='gray.100'
       borderRightWidth='1px'
       borderRightColor='gray.200'
-      shadow='md'
+      // shadow='xs'
       p='4'
       align='stretch'
+      spacing='4'
     >
+      <Box h='10' w='full' bg='gray.300' />
+      <InputGroup variant='outline' colorScheme='blue'>
+        <InputLeftElement
+          pointerEvents='none'
+          children={<span className='material-symbols-outlined'>search</span>}
+        />
+        <Input placeholder='Search' />
+      </InputGroup>
       <VStack spacing='2' align='stretch'>
         {NavLinks.map((item, key) => (
           <NavLink to={item.path} key={key}>
             {({ isActive }) => (
               <HStack
                 px='4'
-                py='3'
-                bg={isActive ? 'gray.300' : 'transparent'}
+                py='2'
+                bg={isActive ? 'blue.100' : 'transparent'}
+                color={isActive ? 'blue.900' : 'gray.500'}
                 borderRadius='md'
                 spacing='2'
                 align='center'
+                fontSize='sm'
               >
-                <span className='material-symbols-outlined'>{item.icon}</span>
-
-                <Text>{item.label}</Text>
+                <Icon name={item.icon} />
+                <Text fontWeight={isActive ? 'medium' : 'normal'}>
+                  {item.label}
+                </Text>
               </HStack>
             )}
           </NavLink>
         ))}
       </VStack>
+      <Divider />
+      <Button
+        variant='outline'
+        width='full'
+        colorScheme='blue'
+        leftIcon={<span className='material-symbols-outlined'>logout</span>}
+        onClick={actions.logOut}
+      >
+        Log Out
+      </Button>
     </VStack>
   );
 }
