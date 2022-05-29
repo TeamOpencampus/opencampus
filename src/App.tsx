@@ -36,7 +36,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path='verify' element={<VerifyUserPage />} />
         <Route path='job-feed' element={<JobFeedPage />} />
-        <Route path='Messages' element={<MessagesPage />} />
+        <Route path='messages' element={<MessagesPage />} />
         <Route path='notifications' element={<NotificationPage />} />
         <Route path='settings' element={<SettingsPage />} />
       </Route>
