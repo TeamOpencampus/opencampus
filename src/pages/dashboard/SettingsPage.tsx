@@ -11,6 +11,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Select,
   Stack,
@@ -22,6 +23,8 @@ import {
   Tabs,
   Text,
   VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -179,7 +182,58 @@ function WorkExperienceForm() {
   return <Box />;
 }
 function AdditionalDocumentsForm() {
-  return <Box />;
+  return (
+    <VStack align='flex-start' spacing='4' divider={<StackDivider />}>
+      {/* Photo */}
+      <FormControl>
+      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='photo'>Current photo</FormLabel>
+            <FormHelperText>Maximum Size 4MB</FormHelperText>
+          </Box>
+          <Button width={['full', '28']} id='photo'>
+            Select File
+          </Button>
+        </Stack>
+      </FormControl>
+      {/* Signature */}
+      <FormControl>
+      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='sign'>Your Signature</FormLabel>
+            <FormHelperText>Maximum Size 4MB</FormHelperText>
+          </Box>
+          <Button width={['full', '28']} id='sign'>
+            Select File
+          </Button>
+        </Stack>
+      </FormControl>
+      {/* ID_Proof */}
+      <FormControl>
+      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='ID_proof'>Valid Identity Proof</FormLabel>
+            <FormHelperText>Maximum Size 4MB</FormHelperText>
+          </Box>
+          <Button width={['full', '28']} id='ID_proof'>
+            Select File
+          </Button>
+        </Stack>
+      </FormControl>
+      {/* Caste Certificate */}
+      <FormControl>
+      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='certificate'>Caste Certificate (if any)</FormLabel>
+            <FormHelperText>Maximum Size 4MB</FormHelperText>
+          </Box>
+          <Button width={['full', '28']} id='certificate'>
+            Select File
+          </Button>
+        </Stack>
+      </FormControl>
+    </VStack>
+  )
 }
 
 function AccountTab() {
