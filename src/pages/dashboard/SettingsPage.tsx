@@ -173,7 +173,122 @@ function BasicDetailsForm() {
 }
 
 function AcademicDetailsForm() {
-  return <Box />;
+  return (
+    <VStack align='flex-start' spacing='4' divider={<StackDivider />}>
+      {/* Type of Course */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='gender'>Course</FormLabel>
+            <FormHelperText>Choose qualified or ongoing course</FormHelperText>
+          </Box>
+          <Select
+            placeholder='Select Course'
+            id='course'
+            width={['full', 'sm']}
+          >
+            <option value='secondary'>Secondary</option>
+            <option value='higher-secondary'>Higher Secondary</option>
+            <option value='diploma'>Diploma</option>
+            <option value='bsc'>B.Sc</option>
+            <option value='msc'>M.Sc</option>
+            <option value='btech'>B.Tech</option>
+            <option value='mtech'>M.Tech</option>
+          </Select>
+        </Stack>
+      </FormControl>
+      {/* Institute */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='institute'>Institute</FormLabel>
+            {/* <FormHelperText>Enter your college or institute</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter college or institute here'
+            id='institute'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Board or Council */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='board'>
+              Board or Council or University
+            </FormLabel>
+            {/* <FormHelperText>Enter your board or council or university</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter board or council or university here'
+            id='board'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Stream or Department */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='stream'>Department</FormLabel>
+            {/* <FormHelperText>Enter your department or stream</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter department or stream here'
+            id='stream'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Start Date */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='start-date'>Course Start Date</FormLabel>
+            {/* <FormHelperText>Enter your course start date</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter start date here'
+            id='start-date'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* End Date */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='end-date'>Course End Date</FormLabel>
+            {/* <FormHelperText>Enter your course end date</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter end date here'
+            id='end-date'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Marks */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='marks'>Marks CGPA or Percentage</FormLabel>
+            <FormHelperText>Average marks cgpa or percentage</FormHelperText>
+          </Box>
+          <Input
+            placeholder='Enter cgpa or percentage here'
+            id='marks'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      <ButtonGroup spacing='6'>
+        <Button>Reset</Button>
+        <Button colorScheme='blue'>Save</Button>
+      </ButtonGroup>
+    </VStack>
+  );
 }
 function WorkExperienceForm() {
   return <Box />;
