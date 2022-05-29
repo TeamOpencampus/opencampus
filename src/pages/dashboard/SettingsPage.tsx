@@ -186,7 +186,7 @@ function AdditionalDocumentsForm() {
     <VStack align='flex-start' spacing='4' divider={<StackDivider />}>
       {/* Photo */}
       <FormControl>
-      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
           <Box w={['full', 'xs']}>
             <FormLabel htmlFor='photo'>Current photo</FormLabel>
             <FormHelperText>Maximum Size 4MB</FormHelperText>
@@ -198,7 +198,7 @@ function AdditionalDocumentsForm() {
       </FormControl>
       {/* Signature */}
       <FormControl>
-      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
           <Box w={['full', 'xs']}>
             <FormLabel htmlFor='sign'>Your Signature</FormLabel>
             <FormHelperText>Maximum Size 4MB</FormHelperText>
@@ -210,7 +210,7 @@ function AdditionalDocumentsForm() {
       </FormControl>
       {/* ID_Proof */}
       <FormControl>
-      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
           <Box w={['full', 'xs']}>
             <FormLabel htmlFor='ID_proof'>Valid Identity Proof</FormLabel>
             <FormHelperText>Maximum Size 4MB</FormHelperText>
@@ -222,9 +222,11 @@ function AdditionalDocumentsForm() {
       </FormControl>
       {/* Caste Certificate */}
       <FormControl>
-      <Stack direction={['column', 'row']} spacing={['2', '20']}>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
           <Box w={['full', 'xs']}>
-            <FormLabel htmlFor='certificate'>Caste Certificate (if any)</FormLabel>
+            <FormLabel htmlFor='certificate'>
+              Caste Certificate (if any)
+            </FormLabel>
             <FormHelperText>Maximum Size 4MB</FormHelperText>
           </Box>
           <Button width={['full', '28']} id='certificate'>
@@ -233,7 +235,7 @@ function AdditionalDocumentsForm() {
         </Stack>
       </FormControl>
     </VStack>
-  )
+  );
 }
 
 function AccountTab() {
