@@ -14,15 +14,18 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Skeleton,
   Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import { useQuery } from 'react-query';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuthActions } from '../../_actions/auth.action';
 import { Icon } from '../../_components/Icon';
 import { RequireAuth } from '../../_components/RequireAuth';
+import { useAppSelector } from '../../_state/hooks';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -88,12 +91,33 @@ function SideBar({
   onClose: () => void;
   btnRef: React.RefObject<HTMLButtonElement>;
 }) {
+  const user = useAppSelector((state) => state.auth.user!);
+  const query = useQuery('claims', () =>
+    user
+      .getIdTokenResult()
+      .then((res) => res.claims.role as 'collage' | 'company' | undefined)
+  );
   const actions = useAuthActions();
-  const NavLinks: { label: string; icon: string; path: string }[] = [
+  type LinkProps = {
+    label: string;
+    icon: string;
+    path: string;
+  };
+
+  const default_links: LinkProps[] = [
     { icon: 'home', label: 'Home', path: '/' },
     { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
     { icon: 'chat', label: 'Messages', path: '/messages' },
     { icon: 'notifications', label: 'Notifications', path: '/notifications' },
+    { icon: 'settings', label: 'Settings', path: '/settings' },
+  ];
+
+  const collage_links: LinkProps[] = [
+    { icon: 'home', label: 'Home', path: '/' },
+    { icon: 'group', label: 'Students', path: 'students' },
+    { icon: 'domain', label: 'Companies', path: 'companies' },
+    { icon: 'receipt_long', label: 'Posts', path: 'posts' },
+    { icon: 'fact_check', label: 'Reports', path: 'reports' },
     { icon: 'settings', label: 'Settings', path: '/settings' },
   ];
   return (
@@ -110,7 +134,7 @@ function SideBar({
           <DrawerHeader>OpenCampus</DrawerHeader>
           <DrawerBody>
             <VStack spacing='2' align='stretch'>
-              {NavLinks.map((item, key) => (
+              {default_links.map((item, key) => (
                 <NavLink to={item.path} key={key} onClick={onClose}>
                   {({ isActive }) => (
                     <HStack
@@ -172,27 +196,33 @@ function SideBar({
           <Input placeholder='Search' />
         </InputGroup>
         <VStack spacing='2' align='stretch'>
-          {NavLinks.map((item, key) => (
-            <NavLink to={item.path} key={key}>
-              {({ isActive }) => (
-                <HStack
-                  px='4'
-                  py='2'
-                  bg={isActive ? 'blue.100' : 'transparent'}
-                  color={isActive ? 'blue.900' : 'gray.500'}
-                  borderRadius='md'
-                  spacing='2'
-                  align='center'
-                  fontSize='sm'
-                >
-                  <Icon name={item.icon} />
-                  <Text fontWeight={isActive ? 'medium' : 'normal'}>
-                    {item.label}
-                  </Text>
-                </HStack>
+          {query.isLoading
+            ? new Array(5)
+                .fill(0)
+                .map((_, key) => <Skeleton key={key} height='8' />)
+            : (query.data == 'collage' ? collage_links : default_links).map(
+                (item, key) => (
+                  <NavLink to={item.path} key={key}>
+                    {({ isActive }) => (
+                      <HStack
+                        px='4'
+                        py='2'
+                        bg={isActive ? 'blue.100' : 'transparent'}
+                        color={isActive ? 'blue.900' : 'gray.500'}
+                        borderRadius='md'
+                        spacing='2'
+                        align='center'
+                        fontSize='sm'
+                      >
+                        <Icon name={item.icon} />
+                        <Text fontWeight={isActive ? 'medium' : 'normal'}>
+                          {item.label}
+                        </Text>
+                      </HStack>
+                    )}
+                  </NavLink>
+                )
               )}
-            </NavLink>
-          ))}
         </VStack>
         <Divider />
         <Button

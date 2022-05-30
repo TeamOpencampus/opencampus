@@ -7,6 +7,10 @@ import {
   ResetPage,
   SignupPage,
 } from './pages/authentication';
+import { CompaniesPage } from './pages/dashboard/collage/CompaniesPage';
+import { PostsPage } from './pages/dashboard/collage/PostsPage';
+import { ReportsPage } from './pages/dashboard/collage/ReportsPage';
+import { StudentsPage } from './pages/dashboard/collage/StudentsPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { HomePage } from './pages/dashboard/HomePage';
 import { JobFeedPage } from './pages/dashboard/JobFeedPage';
@@ -35,10 +39,16 @@ function App() {
       <Route path='/' element={<DashboardPage />}>
         <Route index element={<HomePage />} />
         <Route path='verify' element={<VerifyUserPage />} />
+        <Route path='settings' element={<SettingsPage />} />
+        {/* Default */}
         <Route path='job-feed' element={<JobFeedPage />} />
         <Route path='messages' element={<MessagesPage />} />
         <Route path='notifications' element={<NotificationPage />} />
-        <Route path='settings' element={<SettingsPage />} />
+        {/* Collage */}
+        <Route path='students' element={<StudentsPage />} />
+        <Route path='companies' element={<CompaniesPage />} />
+        <Route path='posts' element={<PostsPage />} />
+        <Route path='reports' element={<ReportsPage />} />
       </Route>
       <Route path='login' element={<LoginPage />} />
       <Route path='signup' element={<SignupPage />} />
