@@ -2,6 +2,8 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../hooks';
 import { LoadingPage } from '../pages/LoadingPage';
+import { EmailVerification } from '../pages/verification/EmailVerification';
+import { PhoneVerification } from '../pages/verification/PhoneVerification';
 
 export const WithAuthentication: React.FC<{
   children: JSX.Element;
@@ -11,7 +13,11 @@ export const WithAuthentication: React.FC<{
   const loading = useAppSelector((state) => state.auth.loading);
 
   if (loading) return <LoadingPage />;
-  if (user) return props.children;
+  if (user) {
+    if (!user.emailVerified) return <EmailVerification />;
+    if (!user.phoneNumber) return <PhoneVerification />;
+    return props.children;
+  }
   return <Navigate to='/login' state={{ from: location }} replace />;
 };
 

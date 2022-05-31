@@ -17,7 +17,6 @@ import { MessagesPage } from './pages/dashboard/MessagesPage';
 import { NotificationPage } from './pages/dashboard/NotificationPage';
 import { SettingsPage } from './pages/dashboard/SettingsPage';
 import { NoMatchPage } from './pages/NoMatchPage';
-import { VerifyUserPage } from './pages/verification/VerifyUserPage';
 
 function App() {
   useAuthStateEffect();
@@ -26,7 +25,6 @@ function App() {
     <Routes>
       <Route path='/' element={<DashboardPage />}>
         <Route index element={<HomePage />} />
-        <Route path='verify' element={<VerifyUserPage />} />
         <Route path='settings' element={<SettingsPage />} />
         {/* Default */}
         <Route path='job-feed' element={<JobFeedPage />} />

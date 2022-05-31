@@ -26,13 +26,17 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FirebaseError } from 'firebase/app';
-import { PhoneAuthProvider, RecaptchaVerifier } from 'firebase/auth';
+import {
+  linkWithCredential,
+  PhoneAuthProvider,
+  RecaptchaVerifier,
+} from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { auth } from '../../firebase';
 import { useAppSelector } from '../../hooks';
-import { useAuthActions } from '../../_actions/auth.action';
 
 type TVerificationData = {
   verificationId: string;
@@ -76,6 +80,8 @@ export function PhoneVerification() {
           setCaptchaSolved(true);
         },
         'expired-callback': function () {
+          // Close the OTP modal
+          onClose();
           // Disable `Send OTP` button.
           setCaptchaSolved(false);
         },
@@ -89,17 +95,22 @@ export function PhoneVerification() {
 
   // Manage modal state here
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [otp, setOtp] = useState('');
+  const [verficationCode, setOtp] = useState('');
   const [verifying, setVerifying] = useState(false);
-  const authAction = useAuthActions();
   const handleVerification = async () => {
     setVerifying(true);
     try {
-      await authAction.verifyOtp(user, verificationData?.verificationId!, otp);
+      // Create credentials
+      const credential = PhoneAuthProvider.credential(
+        verificationData?.verificationId!,
+        verficationCode
+      );
+      // Link with account
+      await linkWithCredential(auth.currentUser!, credential);
       onClose();
     } catch (e) {
       toast({
-        title: 'Failed to login.',
+        title: 'Failed to verify mobile number.',
         description: (e as FirebaseError).code,
         status: 'error',
         isClosable: true,
@@ -153,7 +164,7 @@ export function PhoneVerification() {
               <Text>Enter the otp sent to {verificationData?.phoneNumber}</Text>
               <HStack justify='center'>
                 <PinInput
-                  value={otp}
+                  value={verficationCode}
                   variant='flushed'
                   onChange={(val) => setOtp(val)}
                   otp
@@ -167,13 +178,13 @@ export function PhoneVerification() {
                 </PinInput>
               </HStack>
               <ModalFooter>
-                <Button isDisabled variant='outline' mr='3'>
-                  Resend
+                <Button variant='outline' mr='3' onClick={onClose}>
+                  Cancel
                 </Button>
                 <Button
                   variant='solid'
                   colorScheme='blue'
-                  isDisabled={otp.length !== 6}
+                  isDisabled={verficationCode.length !== 6}
                   isLoading={verifying}
                   onClick={handleVerification}
                 >
@@ -184,43 +195,47 @@ export function PhoneVerification() {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <form onSubmit={handleSubmit(verificationHandler)}>
-        <VStack spacing='4' align='start'>
-          <Heading size='lg'>Verify your mobile.</Heading>
-          {/* Email TextBox */}
-          <FormControl isInvalid={Boolean(errors.phoneNumber)}>
-            <FormLabel htmlFor='phoneNumber'>Mobile Number</FormLabel>
-            <InputGroup>
-              <InputLeftAddon children='+91' pointerEvents='none' />
-              <Input
-                id='phoneNumber'
-                type='tel'
-                autoComplete='phone'
-                {...register('phoneNumber')}
-              />
-            </InputGroup>
+      <AuthFormWrapper>
+        <form onSubmit={handleSubmit(verificationHandler)}>
+          <VStack spacing='4' align='start'>
+            <Heading size='lg'>Verify your mobile.</Heading>
+            {/* Email TextBox */}
+            <FormControl isInvalid={Boolean(errors.phoneNumber)}>
+              <FormLabel htmlFor='phoneNumber'>Mobile Number</FormLabel>
+              <InputGroup>
+                <InputLeftAddon children='+91' pointerEvents='none' />
+                <Input
+                  id='phoneNumber'
+                  type='tel'
+                  autoComplete='phone'
+                  {...register('phoneNumber')}
+                />
+              </InputGroup>
 
-            {errors.phoneNumber ? (
-              <FormErrorMessage>{errors.phoneNumber.message}</FormErrorMessage>
-            ) : (
-              <FormHelperText>Provide your mobile number.</FormHelperText>
-            )}
-          </FormControl>
-          <Box height='78px' bg='gray.100' ref={captchaRef} />
+              {errors.phoneNumber ? (
+                <FormErrorMessage>
+                  {errors.phoneNumber.message}
+                </FormErrorMessage>
+              ) : (
+                <FormHelperText>Provide your mobile number.</FormHelperText>
+              )}
+            </FormControl>
+            <Box height='78px' bg='gray.100' ref={captchaRef} />
 
-          {/* Submit Button */}
-          <Button
-            width='full'
-            colorScheme='blue'
-            type='submit'
-            isDisabled={!captchaSolved}
-            isLoading={isSubmitting}
-            loadingText='Sending...'
-          >
-            Send OTP
-          </Button>
-        </VStack>
-      </form>
+            {/* Submit Button */}
+            <Button
+              width='full'
+              colorScheme='blue'
+              type='submit'
+              isDisabled={!captchaSolved}
+              isLoading={isSubmitting}
+              loadingText='Sending...'
+            >
+              Send OTP
+            </Button>
+          </VStack>
+        </form>
+      </AuthFormWrapper>
     </>
   );
 }
