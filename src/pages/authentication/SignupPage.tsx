@@ -15,13 +15,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { CheckAuth } from '../../components/WithAuthentication';
-import { useAuthActions } from '../../_actions/auth.action';
 
 // regex for password with at least 8 characters including 1 number, 1 special charater
 // ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters
@@ -49,15 +49,13 @@ export function SignupPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const authAction = useAuthActions();
-  const navigate = useNavigate();
-  const location = useLocation();
-  // const user = useAppSelector((state) => state.auth.user)!;
-
   const signupHandler = async (values: SignupInputType) => {
     try {
-      const creds = await authAction.signUp(values.email, values.password);
-      await authAction.setupProfile(creds.user, values.fullname, values.email);
+      await createUserWithEmailAndPassword(
+        getAuth(),
+        values.email,
+        values.password
+      );
     } catch (e) {
       toast({
         title: 'Failed to create new account.',
