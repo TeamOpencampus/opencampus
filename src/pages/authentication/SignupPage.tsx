@@ -27,7 +27,7 @@ import { useAuthActions } from '../../_actions/auth.action';
 // ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters
 const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 const SignupInput = z.object({
-  fullname: z.string().nonempty('You must provide your name.'),
+  // fullname: z.string().nonempty('You must provide your name.'),
   email: z.string().email('Please enter a valid email address.'),
   password: z
     .string()
@@ -76,7 +76,7 @@ export function SignupPage() {
           <VStack spacing='4' align='start'>
             <Heading size='lg'>Create an account.</Heading>
             {/* Fullname TextBox */}
-            <FormControl isInvalid={Boolean(errors.fullname)}>
+            {/* <FormControl isInvalid={Boolean(errors.fullname)}>
               <FormLabel htmlFor='fullname'>Full name</FormLabel>
               <Input
                 id='fullname'
@@ -87,7 +87,7 @@ export function SignupPage() {
               {errors.fullname && (
                 <FormErrorMessage>{errors.fullname.message}</FormErrorMessage>
               )}
-            </FormControl>
+            </FormControl> */}
 
             {/* Email TextBox */}
             <FormControl isInvalid={Boolean(errors.email)}>
