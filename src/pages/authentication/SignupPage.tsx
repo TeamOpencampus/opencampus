@@ -19,9 +19,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
+import { CheckAuth } from '../../components/WithAuthentication';
 import { useAuthActions } from '../../_actions/auth.action';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
-import { CheckAuth } from '../../_components/RequireAuth';
 
 // regex for password with at least 8 characters including 1 number, 1 special charater
 // ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters

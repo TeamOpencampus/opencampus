@@ -18,14 +18,18 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FirebaseError } from 'firebase/app';
+import { applyActionCode } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
+import { auth } from '../../firebase';
 import { useAuthActions } from '../../_actions/auth.action';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
 
 export function ActionPage() {
+  // @todo: Replace custom parsing logic with `parseActionCodeURL` function from `firebase/auth`.
   const [params] = useSearchParams();
   const mode = params.get('mode') as
     | 'resetPassword'
@@ -33,7 +37,7 @@ export function ActionPage() {
     | 'verifyEmail'
     | null;
   const actionCode = params.get('oobCode');
-  const continueUrl = params.get('continueUrl');
+  const continueUrl = params.get('continueUrl') ?? '/';
 
   if (
     !mode ||
@@ -46,7 +50,9 @@ export function ActionPage() {
     <AuthFormWrapper>
       {mode === 'resetPassword' && <ResetForm code={actionCode} />}
       {/* {mode === 'recoverEmail' && <ResetForm />} */}
-      {/* {mode === 'verifyEmail' && <ResetForm />} */}
+      {mode === 'verifyEmail' && (
+        <VerifyForm code={actionCode} url={continueUrl} />
+      )}
     </AuthFormWrapper>
   );
 }
@@ -211,5 +217,67 @@ function ResetForm(props: { code: string }) {
         </Button>
       </VStack>
     </form>
+  );
+}
+
+function VerifyForm(props: { code: string; url: string }) {
+  const [state, setState] = useState<{
+    verified?: boolean;
+    error?: FirebaseError;
+  }>({});
+
+  useEffect(() => {
+    applyActionCode(auth, props.code)
+      .then(() => setState({ verified: true }))
+      .catch((err) => setState({ error: err as FirebaseError }));
+  }, []);
+
+  if (!state.error && !state.verified)
+    return (
+      <VStack p='8'>
+        <CircularProgress size='80px' thickness='2px' isIndeterminate />
+        <Text>Checking link...</Text>
+      </VStack>
+    );
+
+  if (state.error)
+    return (
+      <Alert
+        status='error'
+        variant='top-accent'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <AlertIcon boxSize='40px' mr={0} />
+        <AlertTitle mt='4' mb='0'>
+          Invalid verification link.
+        </AlertTitle>
+        <AlertDescription maxW='xs'>{state.error.code}</AlertDescription>
+      </Alert>
+    );
+
+  return (
+    <VStack spacing='4'>
+      <Alert
+        status='success'
+        variant='subtle'
+        bg='transparent'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <AlertIcon boxSize='40px' mr={0} />
+        <AlertTitle mt='4' mb='0'>
+          Verification Successful
+        </AlertTitle>
+        <AlertDescription maxW='xs'>
+          Please continue, if not automatically redirected.
+        </AlertDescription>
+      </Alert>
+      <Button as={Link} to={props.url} colorScheme='blue' w='full'>
+        Continue to Dashboard
+      </Button>
+    </VStack>
   );
 }

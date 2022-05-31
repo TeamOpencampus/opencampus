@@ -15,9 +15,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
+import { CheckAuth } from '../../components/WithAuthentication';
 import { useAuthActions } from '../../_actions/auth.action';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
-import { CheckAuth } from '../../_components/RequireAuth';
 
 const LoginInput = z.object({
   email: z.string().email('Please enter a valid email address.'),
