@@ -13,8 +13,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { useAuthActions } from '../../_actions/auth.action';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
 
 const ResetInput = z.object({
   email: z.string().email('Please enter a valid email address.'),

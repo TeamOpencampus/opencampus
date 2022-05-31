@@ -22,8 +22,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { useAuthActions } from '../../_actions/auth.action';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
 
 export function ActionPage() {
   const [params] = useSearchParams();

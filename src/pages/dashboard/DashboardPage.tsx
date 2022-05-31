@@ -21,10 +21,10 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { Icon } from '../../components/Icon';
+import { WithAuthentication } from '../../components/WithAuthentication';
 import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
-import { Icon } from '../../_components/Icon';
-import { WithAuthentication } from '../../_components/WithAuthentication';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();

@@ -1,5 +1,5 @@
+import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { useAppSelector } from '../../hooks';
-import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
 import { EmailVerification } from './EmailVerification';
 import { PhoneVerification } from './PhoneVerification';
 
