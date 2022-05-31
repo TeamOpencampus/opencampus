@@ -27,9 +27,11 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FirebaseError } from 'firebase/app';
 import {
+  getAuth,
   linkWithCredential,
   PhoneAuthProvider,
   RecaptchaVerifier,
+  reload,
 } from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -107,7 +109,15 @@ export function PhoneVerification() {
       );
       // Link with account
       await linkWithCredential(auth.currentUser!, credential);
+      toast({
+        title: 'Mobile number added',
+        // description: ``,
+        status: 'success',
+        isClosable: true,
+        position: 'bottom',
+      });
       onClose();
+      await reload(getAuth().currentUser!);
     } catch (e) {
       toast({
         title: 'Failed to verify mobile number.',
