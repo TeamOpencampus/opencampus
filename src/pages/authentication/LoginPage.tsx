@@ -12,12 +12,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { CheckAuth } from '../../components/WithAuthentication';
-import { useAuthActions } from '../../_actions/auth.action';
 
 const LoginInput = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -34,11 +34,13 @@ export function LoginPage() {
     formState: { isSubmitting, errors },
   } = useForm<LoginInputType>({ resolver: zodResolver(LoginInput) });
 
-  const authAction = useAuthActions();
-
   const loginHandler = async (values: LoginInputType) => {
     try {
-      await authAction.signIn(values.email, values.password);
+      await signInWithEmailAndPassword(
+        getAuth(),
+        values.email,
+        values.password
+      );
     } catch (e) {
       toast({
         title: 'Failed to login.',
