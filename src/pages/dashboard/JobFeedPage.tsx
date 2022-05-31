@@ -37,12 +37,12 @@ export function JobFeedPage() {
 
 function JobFeedItem() {
   return (
-    <Box w={['xs', 'full']} shadow='md' rounded='lg'>
+    <Box w={['full', 'full']} shadow='md' rounded='lg'>
       <VStack py={4} px={6} align='flex-start' spacing='2'>
         <Heading fontSize='2xl' color='gray.800'>
           Full Stack Developer
         </Heading>
-        <Text pt='4' color='gray.600'>
+        <Text pt='1' color='gray.600'>
           Tesla Motors India
         </Text>
         <HStack spacing={2}>
@@ -54,7 +54,7 @@ function JobFeedItem() {
           </Tag>
         </HStack>
         <Grid
-          templateColumns={['repeat(3, 1fr)', 'repeat(5, 1fr)']}
+          templateColumns={['repeat(2, 1fr)', 'repeat(5, 1fr)']}
           gap={['3', '2']}
         >
           {[
