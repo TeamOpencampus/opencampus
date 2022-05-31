@@ -24,14 +24,14 @@ import { useQuery } from 'react-query';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuthActions } from '../../_actions/auth.action';
 import { Icon } from '../../_components/Icon';
-import { RequireAuth } from '../../_components/RequireAuth';
+import { WithAuthentication } from '../../_components/WithAuthentication';
 import { useAppSelector } from '../../_state/hooks';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   return (
-    <RequireAuth>
+    <WithAuthentication>
       <>
         {/* Topbar */}
         <TopBar onOpen={onOpen} btnRef={btnRef} />
@@ -42,7 +42,7 @@ export function DashboardPage() {
           <Outlet />
         </Box>
       </>
-    </RequireAuth>
+    </WithAuthentication>
   );
 }
 

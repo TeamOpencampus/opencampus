@@ -21,7 +21,7 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuthActions } from '../../_actions/auth.action';
 import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
-import { CheckAuth } from '../../_components/RequireAuth';
+import { CheckAuth } from '../../_components/WithAuthentication';
 
 // regex for password with at least 8 characters including 1 number, 1 special charater
 // ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters

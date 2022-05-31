@@ -17,7 +17,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuthActions } from '../../_actions/auth.action';
 import { AuthFormWrapper } from '../../_components/AuthFormWrapper';
-import { CheckAuth } from '../../_components/RequireAuth';
+import { CheckAuth } from '../../_components/WithAuthentication';
 
 const LoginInput = z.object({
   email: z.string().email('Please enter a valid email address.'),
