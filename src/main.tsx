@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { store } from './hooks/store';
 import './index.css';
-import { store } from './_state/store';
 
 const theme = extendTheme({
   fonts: {

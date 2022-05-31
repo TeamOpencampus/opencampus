@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { auth } from './firebase';
+import { useAuthStateEffect } from './hooks';
 import {
   ActionPage,
   LoginPage,
@@ -19,20 +18,9 @@ import { NotificationPage } from './pages/dashboard/NotificationPage';
 import { SettingsPage } from './pages/dashboard/SettingsPage';
 import { NoMatchPage } from './pages/NoMatchPage';
 import { VerifyUserPage } from './pages/verification/VerifyUserPage';
-import { useAppDispatch } from './_state/hooks';
-import { login, logout } from './_state/slices/auth';
 
 function App() {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      // const user = useMemo(() => val, [val]);
-
-      if (user === null) dispatch(logout());
-      else dispatch(login(user));
-    });
-    return unsubscribe;
-  }, []);
+  useAuthStateEffect();
 
   return (
     <Routes>

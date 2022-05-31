@@ -1,14 +1,16 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../_state/hooks';
+import { useAppSelector } from '../hooks';
+import { LoadingPage } from '../pages/LoadingPage';
 
 export const WithAuthentication: React.FC<{
   children: JSX.Element;
 }> = (props) => {
   const location = useLocation();
   const user = useAppSelector((state) => state.auth.user);
+  const loading = useAppSelector((state) => state.auth.loading);
 
-  // if (loading) return <LoadingPage />;
+  if (loading) return <LoadingPage />;
   if (user) return props.children;
   return <Navigate to='/login' state={{ from: location }} replace />;
 };

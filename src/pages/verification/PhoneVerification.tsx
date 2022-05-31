@@ -31,8 +31,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { auth } from '../../firebase';
+import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
-import { useAppSelector } from '../../_state/hooks';
 
 type TVerificationData = {
   verificationId: string;

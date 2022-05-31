@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonProps,
   Divider,
   Drawer,
   DrawerBody,
@@ -14,18 +15,16 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Skeleton,
   Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
-import { useQuery } from 'react-query';
+import React, { useMemo } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
 import { Icon } from '../../_components/Icon';
 import { WithAuthentication } from '../../_components/WithAuthentication';
-import { useAppSelector } from '../../_state/hooks';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,35 +90,8 @@ function SideBar({
   onClose: () => void;
   btnRef: React.RefObject<HTMLButtonElement>;
 }) {
-  const user = useAppSelector((state) => state.auth.user!);
-  const query = useQuery('claims', () =>
-    user
-      .getIdTokenResult()
-      .then((res) => res.claims.role as 'collage' | 'company' | undefined)
-  );
-  const actions = useAuthActions();
-  type LinkProps = {
-    label: string;
-    icon: string;
-    path: string;
-  };
+  const role = useAppSelector((state) => state.auth.role);
 
-  const default_links: LinkProps[] = [
-    { icon: 'home', label: 'Home', path: '/' },
-    { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
-    { icon: 'chat', label: 'Messages', path: '/messages' },
-    { icon: 'notifications', label: 'Notifications', path: '/notifications' },
-    { icon: 'settings', label: 'Settings', path: '/settings' },
-  ];
-
-  const collage_links: LinkProps[] = [
-    { icon: 'home', label: 'Home', path: '/' },
-    { icon: 'group', label: 'Students', path: 'students' },
-    { icon: 'domain', label: 'Companies', path: 'companies' },
-    { icon: 'receipt_long', label: 'Posts', path: 'posts' },
-    { icon: 'fact_check', label: 'Reports', path: 'reports' },
-    { icon: 'settings', label: 'Settings', path: '/settings' },
-  ];
   return (
     <>
       <Drawer
@@ -133,108 +105,117 @@ function SideBar({
           <DrawerCloseButton />
           <DrawerHeader>OpenCampus</DrawerHeader>
           <DrawerBody>
-            <VStack spacing='2' align='stretch'>
-              {default_links.map((item, key) => (
-                <NavLink to={item.path} key={key} onClick={onClose}>
-                  {({ isActive }) => (
-                    <HStack
-                      px='4'
-                      py='2'
-                      bg={isActive ? 'blue.100' : 'transparent'}
-                      color={isActive ? 'blue.900' : 'gray.500'}
-                      borderRadius='md'
-                      spacing='2'
-                      align='center'
-                      fontSize='sm'
-                    >
-                      <Icon name={item.icon} />
-                      <Text fontWeight={isActive ? 'medium' : 'normal'}>
-                        {item.label}
-                      </Text>
-                    </HStack>
-                  )}
-                </NavLink>
-              ))}
-            </VStack>
+            <NavLinks role={role} />
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              variant='outline'
-              width='full'
-              colorScheme='blue'
-              leftIcon={
-                <span className='material-symbols-outlined'>logout</span>
-              }
-              onClick={actions.logOut}
-            >
-              Log Out
-            </Button>
+            <LogOutButton />
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <VStack
+      <Box
         display={['none', 'block']}
         pos='fixed'
         top='0'
         left='0'
         mt='0px'
         w={{ base: '48', md: '52', lg: '60' }}
-        h='100vh'
+        minH='100vh'
         borderRightWidth='1px'
         borderRightColor='gray.200'
+        // overflowY='scroll'
         // shadow='xs'
         p='4'
-        align='stretch'
-        spacing='4'
       >
-        <Box h='10' w='full' bg='gray.300' />
-        <InputGroup variant='outline' colorScheme='blue'>
-          <InputLeftElement
-            pointerEvents='none'
-            children={<span className='material-symbols-outlined'>search</span>}
-          />
-          <Input placeholder='Search' />
-        </InputGroup>
-        <VStack spacing='2' align='stretch'>
-          {query.isLoading
-            ? new Array(5)
-                .fill(0)
-                .map((_, key) => <Skeleton key={key} height='8' />)
-            : (query.data == 'collage' ? collage_links : default_links).map(
-                (item, key) => (
-                  <NavLink to={item.path} key={key}>
-                    {({ isActive }) => (
-                      <HStack
-                        px='4'
-                        py='2'
-                        bg={isActive ? 'blue.100' : 'transparent'}
-                        color={isActive ? 'blue.900' : 'gray.500'}
-                        borderRadius='md'
-                        spacing='2'
-                        align='center'
-                        fontSize='sm'
-                      >
-                        <Icon name={item.icon} />
-                        <Text fontWeight={isActive ? 'medium' : 'normal'}>
-                          {item.label}
-                        </Text>
-                      </HStack>
-                    )}
-                  </NavLink>
-                )
-              )}
+        <VStack align='stretch' spacing='4' h='full'>
+          <Box h='10' w='full' bg='gray.300' />
+          <InputGroup variant='outline' colorScheme='blue'>
+            <InputLeftElement
+              pointerEvents='none'
+              children={
+                <span className='material-symbols-outlined'>search</span>
+              }
+            />
+            <Input placeholder='Search' />
+          </InputGroup>
+          <NavLinks role={role} />
+          <Divider />
+          <LogOutButton justifySelf='flex-end' />
         </VStack>
-        <Divider />
-        <Button
-          variant='outline'
-          width='full'
-          colorScheme='blue'
-          leftIcon={<span className='material-symbols-outlined'>logout</span>}
-          onClick={actions.logOut}
-        >
-          Log Out
-        </Button>
-      </VStack>
+      </Box>
     </>
   );
 }
+
+type LinkProps = {
+  label: string;
+  icon: string;
+  path: string;
+};
+function NavLinks({ role }: { role: string | object | undefined }) {
+  const default_links = useMemo<LinkProps[]>(
+    () => [
+      { icon: 'home', label: 'Home', path: '/' },
+      { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
+      { icon: 'chat', label: 'Messages', path: '/messages' },
+      { icon: 'notifications', label: 'Notifications', path: '/notifications' },
+      { icon: 'settings', label: 'Settings', path: '/settings' },
+    ],
+    []
+  );
+
+  const collage_links = useMemo<LinkProps[]>(
+    () => [
+      { icon: 'home', label: 'Home', path: '/' },
+      { icon: 'group', label: 'Students', path: 'students' },
+      { icon: 'domain', label: 'Companies', path: 'companies' },
+      { icon: 'receipt_long', label: 'Posts', path: 'posts' },
+      { icon: 'fact_check', label: 'Reports', path: 'reports' },
+      { icon: 'settings', label: 'Settings', path: '/settings' },
+    ],
+    []
+  );
+  return (
+    <VStack spacing='2' align='stretch'>
+      {(role === 'collage' ? collage_links : default_links).map((item, key) => (
+        <NavLink to={item.path} key={key}>
+          {({ isActive }) => (
+            <HStack
+              px='4'
+              py='2'
+              bg={isActive ? 'blue.100' : 'transparent'}
+              color={isActive ? 'blue.900' : 'gray.500'}
+              borderRadius='md'
+              spacing='2'
+              align='center'
+              fontSize='sm'
+            >
+              <Icon name={item.icon} />
+              <Text fontWeight={isActive ? 'medium' : 'normal'}>
+                {item.label}
+              </Text>
+            </HStack>
+          )}
+        </NavLink>
+      ))}
+    </VStack>
+  );
+}
+
+const LogOutButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const actions = useAuthActions();
+    return (
+      <Button
+        ref={ref}
+        {...props}
+        variant='outline'
+        width='full'
+        colorScheme='blue'
+        leftIcon={<span className='material-symbols-outlined'>logout</span>}
+        onClick={actions.logOut}
+      >
+        Log Out
+      </Button>
+    );
+  }
+);

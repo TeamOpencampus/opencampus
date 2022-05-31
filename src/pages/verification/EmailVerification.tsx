@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
+import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
-import { useAppSelector } from '../../_state/hooks';
 
 export function EmailVerification() {
   const toast = useToast();
