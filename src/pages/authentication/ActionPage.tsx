@@ -37,7 +37,7 @@ export function ActionPage() {
     | 'verifyEmail'
     | null;
   const actionCode = params.get('oobCode');
-  const continueUrl = params.get('continueUrl');
+  const continueUrl = params.get('continueUrl') ?? '/';
 
   if (
     !mode ||
@@ -50,7 +50,9 @@ export function ActionPage() {
     <AuthFormWrapper>
       {mode === 'resetPassword' && <ResetForm code={actionCode} />}
       {/* {mode === 'recoverEmail' && <ResetForm />} */}
-      {mode === 'verifyEmail' && <VerifyForm code={actionCode} />}
+      {mode === 'verifyEmail' && (
+        <VerifyForm code={actionCode} url={continueUrl} />
+      )}
     </AuthFormWrapper>
   );
 }
@@ -218,7 +220,7 @@ function ResetForm(props: { code: string }) {
   );
 }
 
-function VerifyForm(props: { code: string }) {
+function VerifyForm(props: { code: string; url: string }) {
   const [state, setState] = useState<{
     verified?: boolean;
     error?: FirebaseError;
@@ -256,21 +258,26 @@ function VerifyForm(props: { code: string }) {
     );
 
   return (
-    <Alert
-      status='success'
-      variant='subtle'
-      bg='transparent'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
-    >
-      <AlertIcon boxSize='40px' mr={0} />
-      <AlertTitle mt='4' mb='0'>
-        Verification Successful
-      </AlertTitle>
-      <AlertDescription maxW='xs'>
-        Please continue, if not automatically redirected.
-      </AlertDescription>
-    </Alert>
+    <VStack spacing='4'>
+      <Alert
+        status='success'
+        variant='subtle'
+        bg='transparent'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <AlertIcon boxSize='40px' mr={0} />
+        <AlertTitle mt='4' mb='0'>
+          Verification Successful
+        </AlertTitle>
+        <AlertDescription maxW='xs'>
+          Please continue, if not automatically redirected.
+        </AlertDescription>
+      </Alert>
+      <Button as={Link} to={props.url} colorScheme='blue' w='full'>
+        Continue to Dashboard
+      </Button>
+    </VStack>
   );
 }
