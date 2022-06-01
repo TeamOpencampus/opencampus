@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -294,7 +295,80 @@ function AcademicDetailsForm() {
   );
 }
 function WorkExperienceForm() {
-  return <Box />;
+  return (
+    <VStack align='flex-start' spacing='4' divider={<StackDivider />}>
+      {/* Have Work Experience */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='have_exp'>
+              Do You Have Prior Work Experience?
+            </FormLabel>
+          </Box>
+          <Checkbox>Yes</Checkbox>
+        </Stack>
+      </FormControl>
+      {/* Previous Company */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='company'>Previous Company</FormLabel>
+          </Box>
+          <Input
+            placeholder='Enter name of company here'
+            id='company'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Start Date */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='start_date_exp'>Start Date</FormLabel>
+            {/* <FormHelperText>Enter start date</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter start date here'
+            id='start_date_exp'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* End Date */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='end_date_exp'>End Date</FormLabel>
+            {/* <FormHelperText>Enter end date</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter end date here'
+            id='end_date_exp'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      {/* Last Salary */}
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='last_salary'>Last Salary</FormLabel>
+            {/* <FormHelperText>Enter your last salary here</FormHelperText> */}
+          </Box>
+          <Input
+            placeholder='Enter last salary here'
+            id='last_salary'
+            width={['full', 'sm']}
+          />
+        </Stack>
+      </FormControl>
+      <ButtonGroup spacing='6'>
+        <Button>Reset</Button>
+        <Button colorScheme='blue'>Save</Button>
+      </ButtonGroup>
+    </VStack>
+  );
 }
 function AdditionalDocumentsForm() {
   return (
