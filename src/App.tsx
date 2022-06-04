@@ -15,6 +15,7 @@ import { HomePage } from './pages/dashboard/HomePage';
 import { JobFeedPage } from './pages/dashboard/JobFeedPage';
 import { MessagesPage } from './pages/dashboard/MessagesPage';
 import { NotificationPage } from './pages/dashboard/NotificationPage';
+import { OnboardingPage } from './pages/dashboard/OnboardingPage';
 import { SettingsPage } from './pages/dashboard/SettingsPage';
 import { NoMatchPage } from './pages/NoMatchPage';
 
@@ -36,6 +37,7 @@ function App() {
         <Route path='posts' element={<PostsPage />} />
         <Route path='reports' element={<ReportsPage />} />
       </Route>
+      <Route path='onboarding' element={<OnboardingPage />} />
       <Route path='login' element={<LoginPage />} />
       <Route path='signup' element={<SignupPage />} />
       <Route path='reset' element={<ResetPage />} />
