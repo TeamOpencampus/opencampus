@@ -23,6 +23,10 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
+    markAsCreated: (state) => {
+      state.loading = false;
+      state.created = true;
+    },
     reset: (state) => {
       state = initialState;
     },
@@ -36,5 +40,5 @@ const profileSlice = createSlice({
   },
 });
 
-export const { reset } = profileSlice.actions;
+export const { markAsCreated, reset } = profileSlice.actions;
 export default profileSlice.reducer;
