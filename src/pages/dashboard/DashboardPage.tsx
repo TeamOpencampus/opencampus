@@ -19,7 +19,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
@@ -30,9 +30,9 @@ import { LoadingPage } from '../LoadingPage';
 export function DashboardPage() {
   const navigate = useNavigate();
   const profile = useAppSelector((state) => state.profile);
-  useEffect(() => {
-    navigate('/onboarding', { replace: true });
-  }, [profile.loading]);
+  // useEffect(() => {
+  //   navigate('/onboarding', { replace: true });
+  // }, [profile.loading]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   return (

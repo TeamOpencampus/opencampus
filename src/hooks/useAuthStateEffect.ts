@@ -11,7 +11,7 @@ export function useAuthStateEffect() {
       async (user) => {
         if (user !== null) {
           dispatch(fetchUserRole(user));
-          dispatch(checkProfileCreated(user));
+          dispatch(checkProfileCreated());
         } else {
           dispatch(reset());
         }
