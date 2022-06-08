@@ -20,27 +20,37 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
 import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
+import { LoadingPage } from '../LoadingPage';
 
 export function DashboardPage() {
+  const navigate = useNavigate();
+  const profile = useAppSelector((state) => state.profile);
+  // useEffect(() => {
+  //   navigate('/onboarding', { replace: true });
+  // }, [profile.loading]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   return (
     <WithAuthentication>
-      <>
-        {/* Topbar */}
-        <TopBar onOpen={onOpen} btnRef={btnRef} />
-        {/* Sidebar */}
-        <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
-        {/* Content */}
-        <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
-          <Outlet />
-        </Box>
-      </>
+      {profile.loading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          {/* Topbar */}
+          <TopBar onOpen={onOpen} btnRef={btnRef} />
+          {/* Sidebar */}
+          <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
+          {/* Content */}
+          <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
+            <Outlet />
+          </Box>
+        </>
+      )}
     </WithAuthentication>
   );
 }
