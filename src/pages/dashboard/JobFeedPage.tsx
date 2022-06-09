@@ -11,16 +11,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-// import { MdHeadset, MdEmail, MdLocationOn } from "react-icons/md";
-// import { BsFillBriefcaseFill } from "react-icons/bs";
-
 export function JobFeedPage() {
   return (
-    <Grid templateColumns='repeat(2, 1fr)' gap='4'>
-      <GridItem>
-        <JobFeedItem />
-      </GridItem>
-    </Grid>
+    <VStack align='stretch' spacing='2'>
+      <Heading>Available Jobs</Heading>
+
+      <Grid templateColumns='repeat(2, 1fr)' gap='4'>
+        <GridItem>
+          <JobFeedItem />
+        </GridItem>
+      </Grid>
+    </VStack>
   );
 }
 
