@@ -38,12 +38,12 @@ export function JobFeedPage() {
 
 function JobFeedItem() {
   return (
-    <Box w='full' shadow='md' rounded='lg'>
+    <Box w={['full', 'full']} shadow='md' rounded='lg'>
       <VStack py={4} px={6} align='flex-start' spacing='2'>
         <Heading fontSize='2xl' color='gray.800'>
           Full Stack Developer
         </Heading>
-        <Text pt='4' color='gray.600'>
+        <Text pt='1' color='gray.600'>
           Tesla Motors India
         </Text>
         <HStack spacing={2}>
@@ -54,7 +54,10 @@ function JobFeedItem() {
             Express Js
           </Tag>
         </HStack>
-        <HStack spacing='6' fontSize='16'>
+        <Grid
+          templateColumns={['repeat(2, 1fr)', 'repeat(5, 1fr)']}
+          gap={['3', '2']}
+        >
           {[
             ['Offer', '6 LPA'],
             ['Mode', 'Remote'],
@@ -67,7 +70,7 @@ function JobFeedItem() {
               <Text color='blackAlpha.900'>{item[1]}</Text>
             </VStack>
           ))}
-        </HStack>
+        </Grid>
         <Stack direction='row' spacing={4} align='center'>
           <Button colorScheme='teal' variant='solid'>
             Apply Now
