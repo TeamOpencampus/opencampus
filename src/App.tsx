@@ -28,7 +28,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path='settings' element={<SettingsPage />} />
         {/* Default */}
-        <Route path='job-feed' element={<JobFeedPage />} />
+        <Route path='jobs' element={<JobFeedPage />} />
         <Route path='messages' element={<MessagesPage />} />
         <Route path='notifications' element={<NotificationPage />} />
         {/* Collage */}

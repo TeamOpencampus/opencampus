@@ -165,9 +165,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
   const default_links = useMemo<LinkProps[]>(
     () => [
       { icon: 'home', label: 'Home', path: '/' },
-      { icon: 'rss_feed', label: 'Job Feed', path: '/job-feed' },
-      { icon: 'chat', label: 'Messages', path: '/messages' },
-      { icon: 'notifications', label: 'Notifications', path: '/notifications' },
+      { icon: 'rss_feed', label: 'Jobs', path: '/jobs' },
       { icon: 'settings', label: 'Settings', path: '/settings' },
     ],
     []
