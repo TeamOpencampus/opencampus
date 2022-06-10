@@ -2128,6 +2128,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-table@npm:^7.7.12":
+  version: 7.7.12
+  resolution: "@types/react-table@npm:7.7.12"
+  dependencies:
+    "@types/react": "*"
+  checksum: 287ea68e75b56c2e70e6d6491cd172348c7302b032789047eb2dca1b25b240684e48a60f58140575828b790f95724b9f3ec4d3adce82fc1c05d994def1449009
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:*, @types/react@npm:^18.0.0":
   version: 18.0.9
   resolution: "@types/react@npm:18.0.9"
@@ -3730,6 +3739,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.8.1
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
+    "@types/react-table": ^7.7.12
     "@vitejs/plugin-react": ^1.3.0
     firebase: ^9.8.1
     framer-motion: ^6
@@ -3742,6 +3752,7 @@ __metadata:
     react-query: ^3.39.1
     react-redux: ^8.0.2
     react-router-dom: 6
+    react-table: ^7.8.0
     typescript: ^4.6.3
     usehooks-ts: ^2.5.3
     vite: ^2.9.9
@@ -4118,6 +4129,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: e999e978c3261756060e67ec0c0ddaf7551850eca2beefd26f807dbcb416fd456d7d3674333e61562604eef5cf9e4503848981e8bfdc7f9e67321414ed6e1a4e
+  languageName: node
+  linkType: hard
+
+"react-table@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "react-table@npm:7.8.0"
+  peerDependencies:
+    react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
+  checksum: 44ca0fb848c6869cd793cede8dc33072b38ebb8f8d2833565afe7cf3eac5d1fa455ac5fb9d06838b16fab0523d5d03e3e82f7645032f71245096e67b892313b9
   languageName: node
   linkType: hard
 
