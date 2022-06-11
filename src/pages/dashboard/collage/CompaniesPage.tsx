@@ -56,7 +56,7 @@ export function CompaniesPage() {
     register,
     watch,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting, errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
@@ -84,7 +84,7 @@ export function CompaniesPage() {
           <ModalBody>
             <Box>
               <VStack spacing={6}>
-                <FormControl>
+                <FormControl isInvalid={Boolean(errors.name)}>
                   <FormLabel htmlFor='company-name'>Company Name</FormLabel>
                   <Input
                     type='text'
@@ -98,7 +98,7 @@ export function CompaniesPage() {
                     <FormErrorMessage>{errors.name.message}</FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={Boolean(errors.personName)}>
                   <FormLabel htmlFor='contact-person-name'>
                     Contact Person Name
                   </FormLabel>
@@ -118,7 +118,7 @@ export function CompaniesPage() {
                     Point of Contact Person from Company
                   </FormHelperText>
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={Boolean(errors.personPhone)}>
                   <FormLabel htmlFor='contact-person-phone'>
                     Contact Person Phone Number
                   </FormLabel>
@@ -138,7 +138,7 @@ export function CompaniesPage() {
                     </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={Boolean(errors.email)}>
                   <FormLabel htmlFor='contact-person-email'>
                     Contact Person Email
                   </FormLabel>
@@ -163,7 +163,12 @@ export function CompaniesPage() {
               <Button variant='outline' onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='blue' onClick={handleSubmit(onSubmit)}>
+              <Button
+                isLoading={isSubmitting}
+                loadingText='Saving...'
+                colorScheme='blue'
+                onClick={handleSubmit(onSubmit)}
+              >
                 Save
               </Button>
             </HStack>
