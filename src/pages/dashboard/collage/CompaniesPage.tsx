@@ -2,9 +2,6 @@ import { Icon } from '@/components/Icon';
 import {
   Box,
   Button,
-  ButtonGroup,
-  CircularProgress,
-  CircularProgressLabel,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -20,11 +17,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Table,
   TableContainer,
   Tbody,
@@ -34,7 +26,6 @@ import {
   Tr,
   useDisclosure,
   VStack,
-  Wrap,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { Column, useTable } from 'react-table';
@@ -107,36 +98,6 @@ export function CompaniesPage() {
                     id='contact-person-email'
                     placeholder='Eg. someone@example.com'
                   />
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor='job-posted'>
-                    Number of Job Posted
-                  </FormLabel>
-                  <NumberInput defaultValue={0} min={0} max={15}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <FormHelperText>
-                    Total Number of Job Posted from this Company
-                  </FormHelperText>
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor='student-placed'>
-                    Number of Student Placed
-                  </FormLabel>
-                  <NumberInput defaultValue={0} min={0} max={15}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <FormHelperText>
-                    Total Number of Student hired by this Company
-                  </FormHelperText>
                 </FormControl>
               </VStack>
             </Box>
