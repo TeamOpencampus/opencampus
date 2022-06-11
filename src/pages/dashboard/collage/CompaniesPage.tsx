@@ -78,7 +78,6 @@ export function CompaniesPage() {
                   <Input
                     type='text'
                     id='contact-person-name'
-                    ref={initialRef}
                     placeholder='Eg. Suman Mondal'
                   />
                   <FormHelperText>
@@ -94,7 +93,6 @@ export function CompaniesPage() {
                     <Input
                       type='tel'
                       id='contact-person-phone'
-                      ref={initialRef}
                       placeholder='Phone Number'
                       errorBorderColor='red'
                     />
@@ -106,8 +104,7 @@ export function CompaniesPage() {
                   </FormLabel>
                   <Input
                     type='email'
-                    id='contact-perosn-email'
-                    ref={initialRef}
+                    id='contact-person-email'
                     placeholder='Eg. someone@example.com'
                   />
                 </FormControl>
