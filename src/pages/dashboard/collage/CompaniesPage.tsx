@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -29,11 +30,41 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { Column, useTable } from 'react-table';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Modal form validation schema
+const FormSchema = z.object({
+  name: z.string().nonempty({ message: 'Company name cannot be empty' }),
+  personName: z.string().nonempty({ message: 'Name cannot be empty' }),
+  personPhone: z
+    .string()
+    .length(10, { message: 'Phone number must be 10 digits' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+});
+
+// extract the inferred type
+type FormSchemaType = z.infer<typeof FormSchema>;
 
 export function CompaniesPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       {/* Add Company Modal Starts */}
@@ -58,9 +89,14 @@ export function CompaniesPage() {
                   <Input
                     type='text'
                     id='company-name'
-                    ref={initialRef}
+                    // ref={initialRef}
                     placeholder='Eg. Amazon India'
+                    {...register('name')}
                   />
+
+                  {errors.name && (
+                    <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='contact-person-name'>
@@ -70,7 +106,14 @@ export function CompaniesPage() {
                     type='text'
                     id='contact-person-name'
                     placeholder='Eg. Suman Mondal'
+                    {...register('personName')}
                   />
+
+                  {errors.personName && (
+                    <FormErrorMessage>
+                      {errors.personName.message}
+                    </FormErrorMessage>
+                  )}
                   <FormHelperText>
                     Point of Contact Person from Company
                   </FormHelperText>
@@ -86,8 +129,14 @@ export function CompaniesPage() {
                       id='contact-person-phone'
                       placeholder='Phone Number'
                       errorBorderColor='red'
+                      {...register('personPhone')}
                     />
                   </InputGroup>
+                  {errors.personPhone && (
+                    <FormErrorMessage>
+                      {errors.personPhone.message}
+                    </FormErrorMessage>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor='contact-person-email'>
@@ -97,17 +146,26 @@ export function CompaniesPage() {
                     type='email'
                     id='contact-person-email'
                     placeholder='Eg. someone@example.com'
+                    {...register('email')}
                   />
+                  {errors.email && (
+                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                  )}
                 </FormControl>
               </VStack>
+              {/* Debugging */}
+              {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
             </Box>
           </ModalBody>
+
           <ModalFooter>
             <HStack>
               <Button variant='outline' onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='blue'>Save</Button>
+              <Button colorScheme='blue' onClick={handleSubmit(onSubmit)}>
+                Save
+              </Button>
             </HStack>
           </ModalFooter>
         </ModalContent>
