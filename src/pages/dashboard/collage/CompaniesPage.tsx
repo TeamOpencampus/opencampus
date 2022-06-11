@@ -28,11 +28,11 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Column, useTable } from 'react-table';
 import { z } from 'zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 // Modal form validation schema
 const FormSchema = z.object({
@@ -54,7 +54,6 @@ export function CompaniesPage() {
 
   const {
     register,
-    watch,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<FormSchemaType>({
@@ -89,7 +88,6 @@ export function CompaniesPage() {
                   <Input
                     type='text'
                     id='company-name'
-                    // ref={initialRef}
                     placeholder='Eg. Amazon India'
                     {...register('name')}
                   />
@@ -153,8 +151,6 @@ export function CompaniesPage() {
                   )}
                 </FormControl>
               </VStack>
-              {/* Debugging */}
-              {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
             </Box>
           </ModalBody>
 
