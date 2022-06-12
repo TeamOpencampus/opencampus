@@ -1,9 +1,11 @@
 import { Icon } from '@/components/Icon';
 import {
+  Box,
   Button,
   Checkbox,
   CheckboxGroup,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -23,9 +25,54 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const CompanyNames = [
+  {
+    name: 'Apple Inc',
+  },
+  {
+    name: 'Google India',
+  },
+  {
+    name: 'Laxmi Chit Fund',
+  },
+];
+
+const FormSchema = z.object({
+  // Company ta parini
+  // company: z
+  //   .string()
+  //   .refine((val) =>
+  //     CompanyNames.map((companyname) => CompanyNames.name).includes(val)
+  //   ),
+  jobTitle: z.string().nonempty('Job title is required'),
+  location: z.string().nonempty('Job location is required'),
+  salary: z.string().nonempty('Enter a resonable salary amount'),
+  // department:
+  jobDescription: z.string().nonempty('Job description is required'),
+});
+
+type FormSchemaType = z.infer<typeof FormSchema>;
 
 export function PostsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       <Modal
@@ -40,64 +87,95 @@ export function PostsPage() {
           <ModalHeader>Post Creation</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack>
-              <FormControl>
-                <FormLabel htmlFor='companies'>Company</FormLabel>
-                <Select id='companies' placeholder='Select Company'>
-                  <option>Company1</option>
-                  <option>Company2</option>
-                  <option>Company3</option>
-                </Select>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor='job_description'>Job Description</FormLabel>
-                <Input
-                  id='job_description'
-                  placeholder='Eg: Junior Developer'
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor='location'>Location</FormLabel>
-                <Input id='location' placeholder='City/Village/Urban' />
-                <FormHelperText>Students will be placed here</FormHelperText>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor='salary'>Salary</FormLabel>
-                <NumberInput>
-                  <NumberInputField
-                    id='salary'
-                    placeholder='Amount in INR'
-                  ></NumberInputField>
-                </NumberInput>
-                <FormHelperText>Students will get paid</FormHelperText>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Department</FormLabel>
-                <CheckboxGroup colorScheme='blue'>
-                  <VStack align='flex-start'>
-                    <Checkbox>Production</Checkbox>
-                    <Checkbox>Research and Development</Checkbox>
-                    <Checkbox>Purchasing</Checkbox>
-                    <Checkbox>Marketing</Checkbox>
-                    <Checkbox>Human Resource Management</Checkbox>
-                  </VStack>
-                </CheckboxGroup>
-              </FormControl>
-              <FormControl>
-                <FormLabel htmlFor='job_desc'>Job Description</FormLabel>
-                <Textarea
-                  id='job_desc'
-                  placeholder='An overview for the job'
-                ></Textarea>
-              </FormControl>
-            </VStack>
+            <Box>
+              <VStack spacing={4}>
+                <FormControl>
+                  <FormLabel htmlFor='companies'>Company</FormLabel>
+                  <Select id='companies' placeholder='Select Company'>
+                    {CompanyNames.map((CompanyNames) => (
+                      <option>{CompanyNames.name}</option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.jobTitle)}>
+                  <FormLabel htmlFor='job_title'>Job Title</FormLabel>
+                  <Input
+                    id='job_title'
+                    placeholder='Eg: Junior Developer'
+                    {...register('jobTitle')}
+                  />
+                  {errors.jobTitle && (
+                    <FormErrorMessage>
+                      {errors.jobTitle.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.location)}>
+                  <FormLabel htmlFor='location'>Location</FormLabel>
+                  <Input
+                    id='location'
+                    placeholder='City/Village/Urban'
+                    {...register('location')}
+                  />
+                  <FormHelperText>Students will be placed here</FormHelperText>
+
+                  {errors.location && (
+                    <FormErrorMessage>
+                      {errors.location.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.salary)}>
+                  <FormLabel htmlFor='salary'>Salary</FormLabel>
+                  <NumberInput>
+                    <NumberInputField
+                      id='salary'
+                      placeholder='Amount in INR'
+                      {...register('salary')}
+                    ></NumberInputField>
+                  </NumberInput>
+                  <FormHelperText>Students will get paid</FormHelperText>
+
+                  {errors.salary && (
+                    <FormErrorMessage>{errors.salary.message}</FormErrorMessage>
+                  )}
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Department</FormLabel>
+                  <CheckboxGroup colorScheme='blue'>
+                    <VStack align='flex-start'>
+                      <Checkbox>Engineering</Checkbox>
+                      <Checkbox>Research and Development</Checkbox>
+                      <Checkbox>Sales or Marketing</Checkbox>
+                      <Checkbox>Management</Checkbox>
+                      <Checkbox>Accounting</Checkbox>
+                    </VStack>
+                  </CheckboxGroup>
+                </FormControl>
+                <FormControl isInvalid={Boolean(errors.jobDescription)}>
+                  <FormLabel htmlFor='job_desc'>Job Description</FormLabel>
+                  <Textarea
+                    id='job_desc'
+                    placeholder='An overview for the job'
+                    {...register('jobDescription')}
+                  ></Textarea>
+                  {errors.jobDescription && (
+                    <FormErrorMessage>
+                      {errors.jobDescription.message}
+                    </FormErrorMessage>
+                  )}
+                </FormControl>
+              </VStack>
+            </Box>
           </ModalBody>
           <ModalFooter>
             <HStack>
               <Button variant='outline' onClick={onClose}>
                 Close
               </Button>
-              <Button colorScheme='blue'>Create Post</Button>
+              <Button colorScheme='blue' onClick={handleSubmit(onSubmit)}>
+                Create Post
+              </Button>
             </HStack>
           </ModalFooter>
         </ModalContent>
