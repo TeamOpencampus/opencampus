@@ -84,13 +84,13 @@ export function StudentsPage() {
                 {...register('email')}
               />
 
-              {errors.email && (
+              {errors.email ? (
                 <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Enter email address of the student.
+                </FormHelperText>
               )}
-
-              <FormHelperText>
-                Enter email address of the student.
-              </FormHelperText>
             </FormControl>
           </ModalBody>
           <ModalFooter>
