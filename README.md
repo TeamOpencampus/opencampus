@@ -1,4 +1,4 @@
-![opencampus](https://socialify.git.ci/TeamOpencampus/opencampus/image?description=1&font=Rokkitt&issues=1&language=1&name=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Dark)
+![opencampus](https://socialify.git.ci/TeamOpencampus/opencampus/image?description=1&font=KoHo&issues=1&language=1&name=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Dark)
 
 ## ⚡ Features
 
