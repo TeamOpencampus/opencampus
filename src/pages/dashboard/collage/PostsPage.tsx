@@ -121,12 +121,14 @@ export function PostsPage() {
                     placeholder='City/Village/Urban'
                     {...register('location')}
                   />
-                  <FormHelperText>Students will be placed here</FormHelperText>
-
-                  {errors.location && (
+                  {errors.location ? (
                     <FormErrorMessage>
                       {errors.location.message}
                     </FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Students will be placed here
+                    </FormHelperText>
                   )}
                 </FormControl>
                 <FormControl isInvalid={Boolean(errors.salary)}>
@@ -138,10 +140,10 @@ export function PostsPage() {
                       {...register('salary')}
                     ></NumberInputField>
                   </NumberInput>
-                  <FormHelperText>Students will get paid</FormHelperText>
-
-                  {errors.salary && (
+                  {errors.salary ? (
                     <FormErrorMessage>{errors.salary.message}</FormErrorMessage>
+                  ) : (
+                    <FormHelperText>Students will get paid</FormHelperText>
                   )}
                 </FormControl>
                 <FormControl>
