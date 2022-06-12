@@ -43,12 +43,7 @@ const CompanyNames = [
 ];
 
 const FormSchema = z.object({
-  // Company ta parini
-  // company: z
-  //   .string()
-  //   .refine((val) =>
-  //     CompanyNames.map((companyname) => CompanyNames.name).includes(val)
-  //   ),
+  company: z.string().nonempty('Company name is required'),
   jobTitle: z.string().nonempty('Job title is required'),
   location: z.string().nonempty('Job location is required'),
   salary: z.string().nonempty('Enter a resonable salary amount'),
@@ -89,13 +84,22 @@ export function PostsPage() {
           <ModalBody>
             <Box>
               <VStack spacing={4}>
-                <FormControl>
+                <FormControl isInvalid={Boolean(errors.company)}>
                   <FormLabel htmlFor='companies'>Company</FormLabel>
-                  <Select id='companies' placeholder='Select Company'>
+                  <Select
+                    id='companies'
+                    placeholder='Select Company'
+                    {...register('company')}
+                  >
                     {CompanyNames.map((CompanyNames) => (
                       <option>{CompanyNames.name}</option>
                     ))}
                   </Select>
+                  {errors.company && (
+                    <FormErrorMessage>
+                      {errors.company.message}
+                    </FormErrorMessage>
+                  )}
                 </FormControl>
                 <FormControl isInvalid={Boolean(errors.jobTitle)}>
                   <FormLabel htmlFor='job_title'>Job Title</FormLabel>
