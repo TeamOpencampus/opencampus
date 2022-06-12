@@ -1,4 +1,5 @@
 ![opencampus](https://socialify.git.ci/TeamOpencampus/opencampus/image?description=1&font=KoHo&issues=1&language=1&name=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Dark)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FTeamOpencampus%2Fopencampus.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FTeamOpencampus%2Fopencampus?ref=badge_shield)
 
 ## ⚡ Features
 
@@ -40,3 +41,6 @@ If you found any bug or want a new feature in the app, then consider creating an
 ## 📜 License
 
 [GNU General Public License v3.0](LICENSE.md)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FTeamOpencampus%2Fopencampus.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FTeamOpencampus%2Fopencampus?ref=badge_large)
