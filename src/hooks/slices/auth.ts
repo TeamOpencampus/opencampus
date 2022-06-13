@@ -1,46 +1,38 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getIdTokenResult, User } from 'firebase/auth';
+import { createSlice } from '@reduxjs/toolkit';
+import Cookie from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
-export const fetchUserRole = createAsyncThunk(
-  'auth/fetchUserRole',
-  async (user: User) => {
-    const result = await getIdTokenResult(user);
-    return result.claims.role;
-  }
-);
+const getToken = () => Cookie.get('token');
+const deleteToken = () => Cookie.remove('token');
+const isLoggedIn = () => !!Cookie.get('token');
+const decodeCookie = () =>
+  jwtDecode<{ sub: string; role: string }>(getToken()!);
 
-interface AuthState {
-  loading: boolean;
-  user?: User | null;
-  error?: Error | null;
-  role?: string | object;
-}
-const initialState: AuthState = { loading: true };
+type AuthState = { id?: string; role?: string };
+
+const initialState: () => AuthState = () => {
+  if (isLoggedIn()) {
+    const data = decodeCookie();
+    return { id: data.sub, role: data.role };
+  } else return {};
+};
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setValue: (state, action: PayloadAction<object | undefined | null>) => {
-      state.loading = false;
-      state.user = action.payload as User;
-      state.error = undefined;
-      if (state.user === null) state.role = undefined;
+    login: (state) => {
+      const data = decodeCookie();
+      state.id = data.sub;
+      state.role = data.role;
     },
-    setError: (state, action: PayloadAction<Error>) => {
-      state.loading = false;
-      state.user = undefined;
-      state.role = undefined;
-      state.error = action.payload;
+    logout: (state) => {
+      deleteToken();
+      delete state.id;
+      delete state.role;
     },
-  },
-
-  extraReducers: (builder) => {
-    builder.addCase(fetchUserRole.fulfilled, (state, action) => {
-      state.role = action.payload;
-    });
   },
 });
 
-export const { setValue, setError } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;

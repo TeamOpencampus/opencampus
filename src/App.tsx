@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import { useAuthStateEffect } from './hooks';
 import {
   ActionPage,
   LoginPage,
@@ -20,8 +19,6 @@ import { SettingsPage } from './pages/dashboard/SettingsPage';
 import { NoMatchPage } from './pages/NoMatchPage';
 
 function App() {
-  useAuthStateEffect();
-
   return (
     <Routes>
       <Route path='/' element={<DashboardPage />}>
