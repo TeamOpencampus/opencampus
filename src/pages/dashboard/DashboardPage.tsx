@@ -171,7 +171,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
     []
   );
 
-  const collage_links = useMemo<LinkProps[]>(
+  const college_links = useMemo<LinkProps[]>(
     () => [
       { icon: 'home', label: 'Home', path: '/' },
       { icon: 'group', label: 'Students', path: 'students' },
@@ -184,7 +184,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
   );
   return (
     <VStack spacing='2' align='stretch'>
-      {(role === 'collage' ? collage_links : default_links).map((item, key) => (
+      {(role === 'college' ? college_links : default_links).map((item, key) => (
         <NavLink to={item.path} key={key}>
           {({ isActive }) => (
             <HStack
