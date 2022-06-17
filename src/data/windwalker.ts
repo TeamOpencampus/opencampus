@@ -1,30 +1,11 @@
-import ky from 'ky';
-import { KyInstance } from 'ky/distribution/types/ky';
+import axios from 'axios';
 
-export interface Result<T> {
-  data: T;
-}
-
+type SigninRequest = { email: string; password: string };
 type TokenResponse = { token: string; refresh_token: string };
 
-class WindWalker {
-  private client: KyInstance;
-  constructor(prefixUrl: string) {
-    this.client = ky.extend({
-      prefixUrl,
-      headers: { 'content-type': 'application/json' },
-    });
-  }
-
-  login = (email: string, password: string) =>
-    this.client
-      .post('login', { body: JSON.stringify({ email, password }) })
-      .json<Result<TokenResponse>>();
-
-  register = (email: string, password: string) =>
-    this.client
-      .post('register', { body: JSON.stringify({ email, password }) })
-      .json<Result<TokenResponse>>();
-}
-
-export default new WindWalker(import.meta.env.VITE_API_URL ?? '/v1');
+const baseURL: string = import.meta.env.VITE_API_URL;
+const client = axios.create({ baseURL });
+export const login = (email: string, password: string) =>
+  client.post<TokenResponse>('login', { email, password });
+export const register = (email: string, password: string) =>
+  client.post<TokenResponse>('register', { email, password });
