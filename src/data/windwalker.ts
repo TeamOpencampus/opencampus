@@ -14,17 +14,15 @@ class WindWalker {
     });
   }
 
-  login(email: string, password: string) {
-    return this.client
+  login = (email: string, password: string) =>
+    this.client
       .post('login', { body: JSON.stringify({ email, password }) })
       .json<Result<string>>();
-  }
 
-  register(email: string, password: string) {
-    return this.client
+  register = (email: string, password: string) =>
+    this.client
       .post('register', { body: JSON.stringify({ email, password }) })
       .json<Result<string>>();
-  }
 }
 
 export default new WindWalker(import.meta.env.VITE_API_URL ?? '/v1');
