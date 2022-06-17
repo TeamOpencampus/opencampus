@@ -5,6 +5,7 @@ import {
   CircularProgress,
   CircularProgressLabel,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -30,11 +31,36 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { Column, useTable } from 'react-table';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+// Modal form validation object schema
+const FormSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
+
+// extract the inferred type
+type FormSchemaType = z.infer<typeof FormSchema>;
 
 export function StudentsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       <Modal
@@ -50,16 +76,21 @@ export function StudentsPage() {
           <ModalHeader>Invite Student</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
+            <FormControl isInvalid={Boolean(errors.email)}>
               <FormLabel htmlFor='email'>Email Address</FormLabel>
               <Input
                 id='email'
-                ref={initialRef}
                 placeholder='Eg: someone@example.com'
+                {...register('email')}
               />
-              <FormHelperText>
-                Enter email address of the student.
-              </FormHelperText>
+
+              {errors.email ? (
+                <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Enter email address of the student.
+                </FormHelperText>
+              )}
             </FormControl>
           </ModalBody>
           <ModalFooter>
@@ -67,7 +98,14 @@ export function StudentsPage() {
               <Button variant='outline' onClick={onClose}>
                 Close
               </Button>
-              <Button colorScheme='blue'>Send Invite</Button>
+              <Button
+                colorScheme='blue'
+                isLoading={isSubmitting}
+                loadingText='Sending...'
+                onClick={handleSubmit(onSubmit)}
+              >
+                Send Invite
+              </Button>
             </HStack>
           </ModalFooter>
         </ModalContent>
