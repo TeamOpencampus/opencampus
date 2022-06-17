@@ -21,16 +21,16 @@ export function useAuthAction() {
   return { login, logout, register };
   async function login(email: string, password: string) {
     try {
-      await windwalker.login(email, password);
-      dispatch(auth.login());
+      const res = await windwalker.login(email, password);
+      dispatch(auth.login(res.data));
     } catch (e) {
       showError('Failed to sign in.', 'Unable to connect to the server.');
     }
   }
   async function register(email: string, password: string) {
     try {
-      await windwalker.register(email, password);
-      dispatch(auth.login());
+      const res = await windwalker.register(email, password);
+      dispatch(auth.login(res.data));
     } catch (e) {
       showError(
         'Failed to create account.',

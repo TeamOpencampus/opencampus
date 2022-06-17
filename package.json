@@ -15,7 +15,6 @@
     "@reduxjs/toolkit": "^1.8.1",
     "firebase": "^9.8.1",
     "framer-motion": "^6",
-    "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
     "ky": "^0.30.0",
     "md5-hex": "^4.0.0",
@@ -31,7 +30,6 @@
     "zod": "^3.16.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-table": "^7.7.12",

@@ -5,6 +5,8 @@ export interface Result<T> {
   data: T;
 }
 
+type TokenResponse = { token: string; refresh_token: string };
+
 class WindWalker {
   private client: KyInstance;
   constructor(prefixUrl: string) {
@@ -17,12 +19,12 @@ class WindWalker {
   login = (email: string, password: string) =>
     this.client
       .post('login', { body: JSON.stringify({ email, password }) })
-      .json<Result<string>>();
+      .json<Result<TokenResponse>>();
 
   register = (email: string, password: string) =>
     this.client
       .post('register', { body: JSON.stringify({ email, password }) })
-      .json<Result<string>>();
+      .json<Result<TokenResponse>>();
 }
 
 export default new WindWalker(import.meta.env.VITE_API_URL ?? '/v1');
