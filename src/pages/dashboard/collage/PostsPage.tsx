@@ -178,7 +178,11 @@ export function PostsPage() {
               <Button variant='outline' onClick={onClose}>
                 Close
               </Button>
-              <Button colorScheme='blue' onClick={handleSubmit(onSubmit)}>
+              <Button
+                colorScheme='blue'
+                onClick={handleSubmit(onSubmit)}
+                isLoading={isSubmitting}
+              >
                 Create Post
               </Button>
             </HStack>
