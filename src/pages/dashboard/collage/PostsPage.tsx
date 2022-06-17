@@ -25,10 +25,9 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 const CompanyNames = [
   {
