@@ -12,13 +12,12 @@ import {
 import { getAuth, sendEmailVerification } from 'firebase/auth';
 import { useState } from 'react';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
-import { useAppSelector } from '../../hooks';
 import { useAuthActions } from '../../_actions/auth.action';
 
 export function EmailVerification() {
   const toast = useToast();
   const actions = useAuthActions();
-  const user = useAppSelector((state) => state.auth.user)!;
+  // const user = useAppSelector((state) => state.auth.user)!;
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -67,8 +66,8 @@ export function EmailVerification() {
               Verification mail sent.
             </AlertTitle>
             <AlertDescription maxWidth='sm'>
-              Verification instructions sent to {user.email}. Please also check
-              the spam folder.
+              {/* Verification instructions sent to {user.email}. Please also check
+              the spam folder. */}
             </AlertDescription>
           </Alert>
         ) : (

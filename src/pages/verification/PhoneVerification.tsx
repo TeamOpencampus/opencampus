@@ -33,12 +33,11 @@ import {
   RecaptchaVerifier,
   reload,
 } from 'firebase/auth';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
 import { auth } from '../../firebase';
-import { useAppSelector } from '../../hooks';
 
 type TVerificationData = {
   verificationId: string;
@@ -55,7 +54,7 @@ type TPhoneVerificationInput = z.infer<typeof PhoneVerificationInput>;
 
 export function PhoneVerification() {
   const toast = useToast();
-  const user = useAppSelector((state) => state.auth.user)!;
+  // const user = useAppSelector((state) => state.auth.user)!;
 
   // Ref to render reCaptcha on.
   const captchaRef = useRef<HTMLDivElement>(null);
