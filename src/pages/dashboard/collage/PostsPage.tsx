@@ -83,7 +83,7 @@ export function PostsPage() {
           <ModalBody>
             <Box>
               <VStack spacing={4}>
-                <FormControl isInvalid={Boolean(errors.company)}>
+                <FormControl isInvalid={!!errors.company}>
                   <FormLabel htmlFor='companies'>Company</FormLabel>
                   <Select
                     id='companies'
@@ -100,7 +100,7 @@ export function PostsPage() {
                     </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.jobTitle)}>
+                <FormControl isInvalid={!!errors.jobTitle}>
                   <FormLabel htmlFor='job_title'>Job Title</FormLabel>
                   <Input
                     id='job_title'
@@ -113,7 +113,7 @@ export function PostsPage() {
                     </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.location)}>
+                <FormControl isInvalid={!!errors.location}>
                   <FormLabel htmlFor='location'>Location</FormLabel>
                   <Input
                     id='location'
@@ -130,7 +130,7 @@ export function PostsPage() {
                     </FormHelperText>
                   )}
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.salary)}>
+                <FormControl isInvalid={!!errors.salary}>
                   <FormLabel htmlFor='salary'>Salary</FormLabel>
                   <NumberInput>
                     <NumberInputField
@@ -157,7 +157,7 @@ export function PostsPage() {
                     </VStack>
                   </CheckboxGroup>
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.jobDescription)}>
+                <FormControl isInvalid={!!errors.jobDescription}>
                   <FormLabel htmlFor='job_desc'>Job Description</FormLabel>
                   <Textarea
                     id='job_desc'
