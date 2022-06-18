@@ -14,6 +14,8 @@ import {
   Heading,
   HStack,
   Input,
+  InputGroup,
+  InputRightElement,
   Select,
   Stack,
   StackDivider,
@@ -428,5 +430,53 @@ function AdditionalDocumentsForm() {
 }
 
 function AccountTab() {
-  return <Text>Account</Text>;
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+
+  return (
+    <VStack align='flex-start' spacing='4'>
+      {/* Change Password */}
+      <Text fontWeight='semibold'>Change Password</Text>
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='new-password'>New Password</FormLabel>
+          </Box>
+          <InputGroup width={['sm', 'lg']}>
+            <Input
+              pr='4.5rem'
+              type={show ? 'text' : 'password'}
+              placeholder='Enter new password'
+            />
+            <InputRightElement width='4.5rem'>
+              <Button h='1.75rem' size='sm' onClick={handleClick}>
+                {show ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Stack>
+      </FormControl>
+      <FormControl>
+        <Stack direction={['column', 'row']} spacing={['2', '20']}>
+          <Box w={['full', 'xs']}>
+            <FormLabel htmlFor='confirm-password'>
+              Confirm New Password
+            </FormLabel>
+          </Box>
+          <InputGroup width={['sm', 'lg']}>
+            <Input
+              pr='4.5rem'
+              type={show ? 'text' : 'password'}
+              placeholder='Confirm new password'
+            />
+          </InputGroup>
+        </Stack>
+      </FormControl>
+      {/* Button */}
+      <ButtonGroup spacing='6'>
+        <Button>Cancel</Button>
+        <Button colorScheme='blue'>Save</Button>
+      </ButtonGroup>
+    </VStack>
+  );
 }
