@@ -1,10 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import {
-  ActionPage,
-  LoginPage,
-  ResetPage,
-  SignupPage,
-} from './pages/authentication';
+import { LoginPage, ResetPage, SignupPage } from './pages/authentication';
 import { CompaniesPage } from './pages/dashboard/collage/CompaniesPage';
 import { PostsPage } from './pages/dashboard/collage/PostsPage';
 import { ReportsPage } from './pages/dashboard/collage/ReportsPage';
@@ -38,7 +33,6 @@ function App() {
       <Route path='login' element={<LoginPage />} />
       <Route path='signup' element={<SignupPage />} />
       <Route path='reset' element={<ResetPage />} />
-      <Route path='__action' element={<ActionPage />} />
       <Route path='*' element={<NoMatchPage />} />
     </Routes>
   );
