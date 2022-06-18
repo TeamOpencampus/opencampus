@@ -13,7 +13,6 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-  HStack,
   Input,
   InputGroup,
   InputRightElement,
@@ -27,14 +26,12 @@ import {
   Tabs,
   Text,
   VStack,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 
 export function SettingsPage() {
   const [params, setParams] = useSearchParams();
@@ -460,25 +457,21 @@ function AccountTab() {
     <VStack align='flex-start' spacing='4'>
       {/* Change Password */}
       <Text fontWeight='semibold'>Change Password</Text>
-      <FormControl isInvalid={Boolean(errors.password)}>
-        <Stack direction={['column', 'row']} spacing={['2', '20']}>
-          <Box w={['full', 'xs']}>
-            <FormLabel htmlFor='new-password'>New Password</FormLabel>
-          </Box>
-          <InputGroup width={['sm', 'lg']}>
-            <Input
-              pr='4.5rem'
-              type={show ? 'text' : 'password'}
-              placeholder='Enter new password'
-              {...register('password')}
-            />
-            <InputRightElement width='4.5rem'>
-              <Button h='1.75rem' size='sm' onClick={handleClick}>
-                {show ? 'Hide' : 'Show'}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </Stack>
+      <FormControl isInvalid={!!errors.password}>
+        <FormLabel htmlFor='new-password'>New Password</FormLabel>
+        <InputGroup maxW='sm'>
+          <Input
+            pr='4.5rem'
+            type={show ? 'text' : 'password'}
+            placeholder='Enter new password'
+            {...register('password')}
+          />
+          <InputRightElement width='4.5rem'>
+            <Button h='1.75rem' size='sm' onClick={handleClick}>
+              {show ? 'Hide' : 'Show'}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
         {errors.password && (
           <FormErrorMessage>{errors.password.message}</FormErrorMessage>
         )}
