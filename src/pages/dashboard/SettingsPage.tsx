@@ -456,22 +456,6 @@ function AccountTab() {
           </InputGroup>
         </Stack>
       </FormControl>
-      <FormControl>
-        <Stack direction={['column', 'row']} spacing={['2', '20']}>
-          <Box w={['full', 'xs']}>
-            <FormLabel htmlFor='confirm-password'>
-              Confirm New Password
-            </FormLabel>
-          </Box>
-          <InputGroup width={['sm', 'lg']}>
-            <Input
-              pr='4.5rem'
-              type={show ? 'text' : 'password'}
-              placeholder='Confirm new password'
-            />
-          </InputGroup>
-        </Stack>
-      </FormControl>
       {/* Button */}
       <ButtonGroup spacing='6'>
         <Button>Cancel</Button>
