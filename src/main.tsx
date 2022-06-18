@@ -21,7 +21,7 @@ const defaultQueryFn: QueryFunction = ({ queryKey }) =>
     .get(queryKey.at(0)! as string, {
       baseURL: import.meta.env.VITE_API_URL,
       headers: {
-        Authorization: JSON.parse(localStorage.getItem('user')!).token,
+        Authorization: JSON.parse(localStorage.getItem('user')!)?.token,
       },
     })
     .then((res) => res.data)

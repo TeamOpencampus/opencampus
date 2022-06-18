@@ -17,6 +17,6 @@ export const register = (email: string, password: string) =>
 export const windwalker = axios.create({
   baseURL,
   headers: {
-    Authorization: JSON.parse(localStorage.getItem('user')!).token,
+    Authorization: JSON.parse(localStorage.getItem('user')!)?.token,
   },
 });
