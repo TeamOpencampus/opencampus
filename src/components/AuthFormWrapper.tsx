@@ -22,7 +22,7 @@ export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
           htmlHeight='80px'
           htmlWidth='300px'
           objectFit='contain'
-          src='../../public/images/opencampus-logo.png'
+          src='/images/opencampus-logo.png'
         ></Image>
         <Box
           mt='8'
