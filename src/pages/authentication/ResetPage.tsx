@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
-import { useAuthActions } from '../../_actions/auth.action';
+// import { useAuthActions } from '../../_actions/auth.action';
 
 const ResetInput = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -31,12 +31,12 @@ export function ResetPage() {
     formState: { isSubmitting, errors },
   } = useForm<ResetInputType>({ resolver: zodResolver(ResetInput) });
 
-  const authAction = useAuthActions();
+  // const authAction = useAuthActions();
 
   const resetHandler = async (values: ResetInputType) => {
     try {
       // send reset instructions
-      await authAction.resetPassword(values.email);
+      // await authAction.resetPassword(values.email);
       // reset form
       reset();
       // show toast on success

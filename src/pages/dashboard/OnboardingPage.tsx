@@ -16,20 +16,16 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { WithAuthentication } from '../../components/WithAuthentication';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { markAsCreated } from '../../hooks/slices/profile';
 import {
   BasicDetailsSchema,
   BasicDetailsValidator,
 } from '../../model/UserProfile';
 
 export function OnboardingPage() {
-  const user = useAppSelector((state) => state.auth.user);
+  // const user = useAppSelector((state) => state.auth.user);
 
   const {
     register,
@@ -40,40 +36,39 @@ export function OnboardingPage() {
     resolver: zodResolver(BasicDetailsValidator),
   });
 
-  useEffect(() => {
-    if (user) {
-      setValue('email', user.email!);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setValue('email', user.email!);
+  //   }
+  // }, [user]);
 
   const toast = useToast();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const submitHandler = async (values: BasicDetailsSchema) => {
-    if (user) {
-      try {
-        const ref = doc(collection(getFirestore(), 'profiles'), user.uid);
-        await setDoc(ref, { basic: values }, { merge: true });
-        dispatch(markAsCreated());
-        toast({
-          status: 'success',
-          position: 'bottom',
-          title: 'Success',
-          description: 'Basic details updated successfully.',
-          isClosable: true,
-        });
-        navigate('/', { replace: true });
-      } catch (e) {
-        toast({
-          status: 'error',
-          position: 'bottom',
-          title: 'Failed',
-          description: 'Failed to update basic details.',
-          isClosable: true,
-        });
-      }
-    }
+    // if (user) {
+    //   try {
+    //     const ref = doc(collection(getFirestore(), 'profiles'), user.uid);
+    //     await setDoc(ref, { basic: values }, { merge: true });
+    //     dispatch(markAsCreated());
+    //     toast({
+    //       status: 'success',
+    //       position: 'bottom',
+    //       title: 'Success',
+    //       description: 'Basic details updated successfully.',
+    //       isClosable: true,
+    //     });
+    //     navigate('/', { replace: true });
+    //   } catch (e) {
+    //     toast({
+    //       status: 'error',
+    //       position: 'bottom',
+    //       title: 'Failed',
+    //       description: 'Failed to update basic details.',
+    //       isClosable: true,
+    //     });
+    //   }
+    // }
   };
 
   return (

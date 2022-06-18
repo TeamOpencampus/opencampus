@@ -1,3 +1,5 @@
+import { useAuthAction } from '@/actions/auth.action';
+import authAtom from '@/state/authAtom';
 import {
   Box,
   Button,
@@ -20,37 +22,26 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
-import { useAppSelector } from '../../hooks';
-import { useAuthActions } from '../../_actions/auth.action';
-import { LoadingPage } from '../LoadingPage';
 
 export function DashboardPage() {
-  const navigate = useNavigate();
-  const profile = useAppSelector((state) => state.profile);
-  // useEffect(() => {
-  //   navigate('/onboarding', { replace: true });
-  // }, [profile.loading]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   return (
     <WithAuthentication>
-      {profile.loading ? (
-        <LoadingPage />
-      ) : (
-        <>
-          {/* Topbar */}
-          <TopBar onOpen={onOpen} btnRef={btnRef} />
-          {/* Sidebar */}
-          <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
-          {/* Content */}
-          <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
-            <Outlet />
-          </Box>
-        </>
-      )}
+      <>
+        {/* Topbar */}
+        <TopBar onOpen={onOpen} btnRef={btnRef} />
+        {/* Sidebar */}
+        <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
+        {/* Content */}
+        <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
+          <Outlet />
+        </Box>
+      </>
     </WithAuthentication>
   );
 }
@@ -100,7 +91,8 @@ function SideBar({
   onClose: () => void;
   btnRef: React.RefObject<HTMLButtonElement>;
 }) {
-  const role = useAppSelector((state) => state.auth.role);
+  const auth = useRecoilValue(authAtom);
+  const role = auth?.role;
 
   return (
     <>
@@ -161,7 +153,7 @@ type LinkProps = {
   icon: string;
   path: string;
 };
-function NavLinks({ role }: { role: string | object | undefined }) {
+function NavLinks({ role }: { role?: string }) {
   const default_links = useMemo<LinkProps[]>(
     () => [
       { icon: 'home', label: 'Home', path: '/' },
@@ -171,7 +163,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
     []
   );
 
-  const collage_links = useMemo<LinkProps[]>(
+  const college_links = useMemo<LinkProps[]>(
     () => [
       { icon: 'home', label: 'Home', path: '/' },
       { icon: 'group', label: 'Students', path: 'students' },
@@ -184,7 +176,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
   );
   return (
     <VStack spacing='2' align='stretch'>
-      {(role === 'collage' ? collage_links : default_links).map((item, key) => (
+      {(role === 'college' ? college_links : default_links).map((item, key) => (
         <NavLink to={item.path} key={key}>
           {({ isActive }) => (
             <HStack
@@ -211,7 +203,7 @@ function NavLinks({ role }: { role: string | object | undefined }) {
 
 const LogOutButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref) => {
-    const actions = useAuthActions();
+    const { logout } = useAuthAction();
     return (
       <Button
         ref={ref}
@@ -220,7 +212,7 @@ const LogOutButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         width='full'
         colorScheme='blue'
         leftIcon={<span className='material-symbols-outlined'>logout</span>}
-        onClick={actions.logOut}
+        onClick={logout}
       >
         Log Out
       </Button>

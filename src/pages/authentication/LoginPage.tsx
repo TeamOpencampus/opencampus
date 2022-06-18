@@ -1,3 +1,4 @@
+import { useAuthAction } from '@/actions/auth.action';
 import {
   Button,
   FormControl,
@@ -8,12 +9,10 @@ import {
   Input,
   Link,
   Text,
-  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
@@ -27,30 +26,15 @@ const LoginInput = z.object({
 type LoginInputType = z.infer<typeof LoginInput>;
 
 export function LoginPage() {
-  const toast = useToast();
+  const { login } = useAuthAction();
   const {
     handleSubmit,
     register,
     formState: { isSubmitting, errors },
   } = useForm<LoginInputType>({ resolver: zodResolver(LoginInput) });
 
-  const loginHandler = async (values: LoginInputType) => {
-    try {
-      await signInWithEmailAndPassword(
-        getAuth(),
-        values.email,
-        values.password
-      );
-    } catch (e) {
-      toast({
-        title: 'Failed to login.',
-        description: (e as Error).message,
-        status: 'error',
-        isClosable: true,
-        position: 'bottom',
-      });
-    }
-  };
+  const loginHandler: SubmitHandler<LoginInputType> = (values) =>
+    login(values.email, values.password);
 
   return (
     <CheckAuth>

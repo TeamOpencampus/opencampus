@@ -1,3 +1,4 @@
+import { useAuthAction } from '@/actions/auth.action';
 import {
   Button,
   FormControl,
@@ -11,13 +12,11 @@ import {
   InputRightElement,
   Link,
   Text,
-  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthFormWrapper } from '../../components/AuthFormWrapper';
@@ -40,7 +39,7 @@ const SignupInput = z.object({
 type SignupInputType = z.infer<typeof SignupInput>;
 
 export function SignupPage() {
-  const toast = useToast();
+  const action = useAuthAction();
   const {
     handleSubmit,
     register,
@@ -49,23 +48,8 @@ export function SignupPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const signupHandler = async (values: SignupInputType) => {
-    try {
-      await createUserWithEmailAndPassword(
-        getAuth(),
-        values.email,
-        values.password
-      );
-    } catch (e) {
-      toast({
-        title: 'Failed to create new account.',
-        description: (e as Error).message,
-        status: 'error',
-        isClosable: true,
-        position: 'bottom',
-      });
-    }
-  };
+  const signupHandler: SubmitHandler<SignupInputType> = (values) =>
+    action.register(values.email, values.password);
 
   return (
     <CheckAuth>

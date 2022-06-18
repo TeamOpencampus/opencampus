@@ -1,13 +1,12 @@
-import { Box, Button, Container, Flex, Text, VStack } from '@chakra-ui/react';
-import { getAuth, signOut } from 'firebase/auth';
+import { Box, Container, Flex } from '@chakra-ui/react';
 import React from 'react';
-import { useAppSelector } from '../hooks';
 
 export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
   props
 ) => {
-  const user = useAppSelector((state) => state.auth.user);
-  const logOutHandler = () => signOut(getAuth());
+  // const user = useAppSelector((state) => state.auth.user);
+  // const logOutHandler = () => signOut(getAuth());
+  const logOutHandler = () => {};
   return (
     <Container>
       <Flex
@@ -30,14 +29,14 @@ export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
         >
           {props.children}
         </Box>
-        {user && (
+        {/*user && (
           <VStack mt='8' maxW='sm'>
             <Text fontSize='sm'>Not {user.email} ?</Text>
             <Button variant='ghost' size='sm' onClick={logOutHandler}>
               Log Out
             </Button>
           </VStack>
-        )}
+        )*/}
       </Flex>
     </Container>
   );
