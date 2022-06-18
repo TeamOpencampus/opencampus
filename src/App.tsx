@@ -5,7 +5,7 @@ import { PostsPage } from './pages/dashboard/collage/PostsPage';
 import { ReportsPage } from './pages/dashboard/collage/ReportsPage';
 import { StudentsPage } from './pages/dashboard/collage/StudentsPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
-import { HomePage } from './pages/dashboard/HomePage';
+import HomePage from './pages/dashboard/HomePage';
 import { JobFeedPage } from './pages/dashboard/JobFeedPage';
 import { MessagesPage } from './pages/dashboard/MessagesPage';
 import { NotificationPage } from './pages/dashboard/NotificationPage';
