@@ -1,14 +1,16 @@
-import windwalker from '@/data/windwalker';
-import { useAppDispatch } from '@/hooks';
-import * as auth from '@/hooks/slices/auth';
+import * as windwalker from '@/data/windwalker';
+import authAtom from '@/state/authAtom';
 import { useToast } from '@chakra-ui/react';
+import { useSetRecoilState } from 'recoil';
 
 export function useAuthAction() {
-  const dispatch = useAppDispatch();
+  const setAuthState = useSetRecoilState(authAtom);
+
   const toast = useToast({
     isClosable: true,
     variant: 'left-accent',
   });
+
   const showError = (title: string, description: string) => {
     toast.closeAll();
     toast({
@@ -19,18 +21,22 @@ export function useAuthAction() {
     });
   };
   return { login, logout, register };
+
   async function login(email: string, password: string) {
     try {
       const res = await windwalker.login(email, password);
-      dispatch(auth.login(res.data));
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setAuthState(res.data);
     } catch (e) {
       showError('Failed to sign in.', 'Unable to connect to the server.');
     }
   }
+
   async function register(email: string, password: string) {
     try {
       const res = await windwalker.register(email, password);
-      dispatch(auth.login(res.data));
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setAuthState(res.data);
     } catch (e) {
       showError(
         'Failed to create account.',
@@ -38,7 +44,9 @@ export function useAuthAction() {
       );
     }
   }
+
   function logout() {
-    dispatch(auth.logout());
+    localStorage.removeItem('user');
+    setAuthState(null);
   }
 }

@@ -2,10 +2,9 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import App from './App';
-import { store } from './hooks/store';
 import './index.css';
 
 const theme = extendTheme({
@@ -19,14 +18,14 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
           <BrowserRouter>
             <App />
           </BrowserRouter>
         </ChakraProvider>
-      </Provider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

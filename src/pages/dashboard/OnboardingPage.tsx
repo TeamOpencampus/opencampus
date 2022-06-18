@@ -19,7 +19,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { WithAuthentication } from '../../components/WithAuthentication';
-import { useAppDispatch } from '../../hooks';
 import {
   BasicDetailsSchema,
   BasicDetailsValidator,
@@ -45,7 +44,6 @@ export function OnboardingPage() {
 
   const toast = useToast();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const submitHandler = async (values: BasicDetailsSchema) => {
     // if (user) {

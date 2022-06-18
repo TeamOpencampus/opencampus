@@ -1,7 +1,11 @@
 import axios from 'axios';
 
-type SigninRequest = { email: string; password: string };
-type TokenResponse = { token: string; refresh_token: string };
+type TokenResponse = {
+  id: string;
+  role: string;
+  token: string;
+  refresh_token: string;
+};
 
 const baseURL: string = import.meta.env.VITE_API_URL;
 const client = axios.create({ baseURL });

@@ -1,4 +1,5 @@
 import { useAuthAction } from '@/actions/auth.action';
+import authAtom from '@/state/authAtom';
 import {
   Box,
   Button,
@@ -22,9 +23,9 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
-import { useAppSelector } from '../../hooks';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,7 +91,8 @@ function SideBar({
   onClose: () => void;
   btnRef: React.RefObject<HTMLButtonElement>;
 }) {
-  const role = useAppSelector((state) => state.auth?.role);
+  const auth = useRecoilValue(authAtom);
+  const role = auth?.role;
 
   return (
     <>
@@ -151,7 +153,7 @@ type LinkProps = {
   icon: string;
   path: string;
 };
-function NavLinks({ role }: { role: string | object | undefined }) {
+function NavLinks({ role }: { role?: string }) {
   const default_links = useMemo<LinkProps[]>(
     () => [
       { icon: 'home', label: 'Home', path: '/' },
