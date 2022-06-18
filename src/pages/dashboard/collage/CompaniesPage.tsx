@@ -71,6 +71,12 @@ export function CompaniesPage() {
       },
     }
   );
+  const { data, isLoading, isError, refetch } = useQuery<TCompaniesData[]>(
+    'secure/college/companies',
+    {
+      initialData: [],
+    }
+  );
   const {
     register,
     handleSubmit,
@@ -219,7 +225,49 @@ export function CompaniesPage() {
             Add Company
           </Button>
         </HStack>
-        <CompaniesTable />
+        {isError && (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Icon name='error' style={{ fontSize: '3em' }} />
+            <Text>Failed to load data.</Text>
+            <Button
+              variant='outline'
+              colorScheme='red'
+              isLoading={isLoading}
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          </VStack>
+        )}
+        {isLoading && (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Spinner />
+            <Text>Loading Data...</Text>
+          </VStack>
+        )}
+
+        {!data ? (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Text>No records. Add more companies.</Text>
+          </VStack>
+        ) : (
+          <CompaniesTable data={data} />
+        )}
       </VStack>
     </>
   );
@@ -234,7 +282,7 @@ type TCompaniesData = {
   job_count: number;
   student_count: number;
 };
-function CompaniesTable() {
+function CompaniesTable({ data }: { data: TCompaniesData[] }) {
   const columns = useMemo<Column<TCompaniesData>[]>(
     () => [
       {
@@ -265,48 +313,11 @@ function CompaniesTable() {
     []
   );
 
-  const { data, isLoading, isError, refetch } = useQuery<TCompaniesData[]>(
-    'secure/college/companies',
-    {
-      initialData: [],
-    }
-  );
-
-  const _data = data!;
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable<TCompaniesData>({
       columns,
-      data: _data,
+      data,
     });
-  if (isError)
-    return (
-      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
-        <Icon name='error' style={{ fontSize: '3em' }} />
-        <Text>Failed to load data.</Text>
-        <Button
-          variant='outline'
-          colorScheme='red'
-          isLoading={isLoading}
-          onClick={() => refetch()}
-        >
-          Retry
-        </Button>
-      </VStack>
-    );
-  if (isLoading)
-    return (
-      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
-        <Spinner />
-        <Text>Loading Data...</Text>
-      </VStack>
-    );
-
-  if (!data)
-    return (
-      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
-        <Text>No records.</Text>
-      </VStack>
-    );
 
   return (
     <TableContainer border='1px' borderColor='gray.100' borderRadius='md'>
