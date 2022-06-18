@@ -1,4 +1,4 @@
-import { Box, Container, Flex } from '@chakra-ui/react';
+import { Box, Container, Flex, Image } from '@chakra-ui/react';
 import React from 'react';
 
 export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
@@ -17,7 +17,13 @@ export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
         justify='center'
       >
         {/* <Heading color='blue.900'>[OpenCampus]</Heading> */}
-        <Box w='60' bg='gray.200' h='10' />
+        {/* <Box w='60' bg='gray.200' h='10' /> */}
+        <Image
+          htmlHeight='80px'
+          htmlWidth='300px'
+          objectFit='contain'
+          src='../../public/images/opencampus-logo.png'
+        ></Image>
         <Box
           mt='8'
           padding='8'
