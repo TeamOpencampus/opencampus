@@ -13,3 +13,10 @@ export const login = (email: string, password: string) =>
   client.post<TokenResponse>('login', { email, password });
 export const register = (email: string, password: string) =>
   client.post<TokenResponse>('register', { email, password });
+
+export const windwalker = axios.create({
+  baseURL,
+  headers: {
+    Authorization: JSON.parse(localStorage.getItem('user')!)?.token,
+  },
+});
