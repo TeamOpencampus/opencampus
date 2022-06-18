@@ -11,12 +11,11 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Select,
-  HStack,
-  IconButton,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -42,10 +41,10 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import NiceModal from '@ebay/nice-modal-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
@@ -409,23 +408,29 @@ type PasswordInputType = z.infer<typeof PasswordInput>;
 function AccountTab() {
   const {
     register,
-    formState: { errors },
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<PasswordInputType>({ resolver: zodResolver(PasswordInput) });
 
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
+  const onChange: SubmitHandler<PasswordInputType> = (values) => {
+    console.log(values);
+  };
+
   return (
-    <VStack align='flex-start' spacing='4'>
+    <VStack align='stretch' spacing='4'>
       {/* Change Password */}
       <Text fontWeight='semibold'>Change Password</Text>
-      <FormControl isInvalid={!!errors.password}>
+      <FormControl isInvalid={!!errors.password} maxW='sm'>
         <FormLabel htmlFor='new-password'>New Password</FormLabel>
-        <InputGroup maxW='sm'>
+        <InputGroup>
           <Input
             pr='4.5rem'
             type={show ? 'text' : 'password'}
             placeholder='Enter new password'
+            autoComplete='new-password'
             {...register('password')}
           />
           <InputRightElement width='4.5rem'>
@@ -440,8 +445,13 @@ function AccountTab() {
       </FormControl>
       {/* Button */}
       <ButtonGroup spacing='6'>
-        <Button>Cancel</Button>
-        <Button colorScheme='blue'>Save</Button>
+        <Button
+          colorScheme='blue'
+          onClick={handleSubmit(onChange)}
+          isLoading={isSubmitting}
+        >
+          Update Password
+        </Button>
       </ButtonGroup>
     </VStack>
   );
