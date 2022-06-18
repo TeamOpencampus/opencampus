@@ -14,6 +14,7 @@ import {
   DrawerOverlay,
   HStack,
   IconButton,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -74,7 +75,7 @@ function TopBar({
             ref={btnRef!}
           />
           {/* Logo */}
-          <Box h='8' w='24' bg='gray.100' />
+          <Image src='/images/logo.png' h='8' w='auto' objectFit='contain' />
         </HStack>
         <IconButton aria-label='Search' icon={<Icon name='search' />} />
       </HStack>
@@ -129,7 +130,7 @@ function SideBar({
         p='4'
       >
         <VStack align='stretch' spacing='4' h='full'>
-          <Box h='10' w='full' bg='gray.300' />
+          <Image src='/images/logo.png' h='16' w='auto' objectFit='contain' />
           <InputGroup variant='outline' colorScheme='blue'>
             <InputLeftElement
               pointerEvents='none'

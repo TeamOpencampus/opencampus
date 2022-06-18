@@ -16,14 +16,7 @@ export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
         align='center'
         justify='center'
       >
-        {/* <Heading color='blue.900'>[OpenCampus]</Heading> */}
-        {/* <Box w='60' bg='gray.200' h='10' /> */}
-        <Image
-          htmlHeight='80px'
-          htmlWidth='300px'
-          objectFit='contain'
-          src='/images/opencampus-logo.png'
-        ></Image>
+        <Image h='20' maxW='sm' objectFit='contain' src='/images/logo.png' />
         <Box
           mt='8'
           padding='8'
