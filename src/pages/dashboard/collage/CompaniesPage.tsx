@@ -300,6 +300,14 @@ function CompaniesTable() {
         <Text>Loading Data...</Text>
       </VStack>
     );
+
+  if (!data)
+    return (
+      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
+        <Text>No records.</Text>
+      </VStack>
+    );
+
   return (
     <TableContainer border='1px' borderColor='gray.100' borderRadius='md'>
       <Table variant='striped' size='md' {...getTableProps()}>
