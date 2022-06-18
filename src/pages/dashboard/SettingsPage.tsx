@@ -9,6 +9,7 @@ import {
   ButtonGroup,
   Checkbox,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
@@ -31,6 +32,9 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
 export function SettingsPage() {
   const [params, setParams] = useSearchParams();
@@ -429,7 +433,26 @@ function AdditionalDocumentsForm() {
   );
 }
 
+// regex for password with at least 8 characters including 1 number, 1 special charater
+// ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters
+const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+const PasswordInput = z.object({
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      'Password must contain at least 8 characters including 1 number and 1 special character'
+    ),
+});
+
+type PasswordInputType = z.infer<typeof PasswordInput>;
+
 function AccountTab() {
+  const {
+    register,
+    formState: { errors },
+  } = useForm<PasswordInputType>({ resolver: zodResolver(PasswordInput) });
+
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
@@ -437,7 +460,7 @@ function AccountTab() {
     <VStack align='flex-start' spacing='4'>
       {/* Change Password */}
       <Text fontWeight='semibold'>Change Password</Text>
-      <FormControl>
+      <FormControl isInvalid={Boolean(errors.password)}>
         <Stack direction={['column', 'row']} spacing={['2', '20']}>
           <Box w={['full', 'xs']}>
             <FormLabel htmlFor='new-password'>New Password</FormLabel>
@@ -447,6 +470,7 @@ function AccountTab() {
               pr='4.5rem'
               type={show ? 'text' : 'password'}
               placeholder='Enter new password'
+              {...register('password')}
             />
             <InputRightElement width='4.5rem'>
               <Button h='1.75rem' size='sm' onClick={handleClick}>
@@ -455,6 +479,9 @@ function AccountTab() {
             </InputRightElement>
           </InputGroup>
         </Stack>
+        {errors.password && (
+          <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+        )}
       </FormControl>
       {/* Button */}
       <ButtonGroup spacing='6'>
