@@ -1,4 +1,5 @@
 import { Icon } from '@/components/Icon';
+import { windwalker } from '@/data/windwalker';
 import {
   Box,
   Button,
@@ -18,30 +19,36 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Column, useTable } from 'react-table';
 import { z } from 'zod';
 
 // Modal form validation schema
 const FormSchema = z.object({
-  name: z.string().nonempty({ message: 'Company name cannot be empty' }),
-  personName: z.string().nonempty({ message: 'Name cannot be empty' }),
-  personPhone: z
+  company_name: z
+    .string()
+    .nonempty({ message: 'Company name cannot be empty' }),
+  contact_person_name: z.string().nonempty({ message: 'Name cannot be empty' }),
+  contact_person_phone: z
     .string()
     .length(10, { message: 'Phone number must be 10 digits' }),
-  email: z.string().email({ message: 'Invalid email address' }),
+  contact_person_email: z.string().email({ message: 'Invalid email address' }),
 });
 
 // extract the inferred type
@@ -51,7 +58,19 @@ export function CompaniesPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-
+  const toast = useToast({
+    position: 'bottom',
+    isClosable: true,
+  });
+  const queryClient = useQueryClient();
+  const mutation = useMutation<string, string, Record<string, any>>(
+    (data) => windwalker.post('secure/college/companies', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('secure/college/companies');
+      },
+    }
+  );
   const {
     register,
     handleSubmit,
@@ -60,8 +79,18 @@ export function CompaniesPage() {
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
+    try {
+      await mutation.mutateAsync(data);
+      toast({
+        title: 'Company created',
+      });
+      onClose();
+    } catch (err) {
+      toast({
+        title: 'Failed to create company',
+      });
+    }
   };
 
   return (
@@ -83,20 +112,22 @@ export function CompaniesPage() {
           <ModalBody>
             <Box>
               <VStack spacing={6}>
-                <FormControl isInvalid={Boolean(errors.name)}>
+                <FormControl isInvalid={!!errors.company_name}>
                   <FormLabel htmlFor='company-name'>Company Name</FormLabel>
                   <Input
                     type='text'
                     id='company-name'
                     placeholder='Eg. Amazon India'
-                    {...register('name')}
+                    {...register('company_name')}
                   />
 
-                  {errors.name && (
-                    <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+                  {errors.company_name && (
+                    <FormErrorMessage>
+                      {errors.company_name.message}
+                    </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.personName)}>
+                <FormControl isInvalid={!!errors.contact_person_name}>
                   <FormLabel htmlFor='contact-person-name'>
                     Contact Person Name
                   </FormLabel>
@@ -104,19 +135,19 @@ export function CompaniesPage() {
                     type='text'
                     id='contact-person-name'
                     placeholder='Eg. Suman Mondal'
-                    {...register('personName')}
+                    {...register('contact_person_name')}
                   />
 
-                  {errors.personName && (
+                  {errors.contact_person_name && (
                     <FormErrorMessage>
-                      {errors.personName.message}
+                      {errors.contact_person_name.message}
                     </FormErrorMessage>
                   )}
                   <FormHelperText>
                     Point of Contact Person from Company
                   </FormHelperText>
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.personPhone)}>
+                <FormControl isInvalid={!!errors.contact_person_phone}>
                   <FormLabel htmlFor='contact-person-phone'>
                     Contact Person Phone Number
                   </FormLabel>
@@ -127,16 +158,16 @@ export function CompaniesPage() {
                       id='contact-person-phone'
                       placeholder='Phone Number'
                       errorBorderColor='red'
-                      {...register('personPhone')}
+                      {...register('contact_person_phone')}
                     />
                   </InputGroup>
-                  {errors.personPhone && (
+                  {errors.contact_person_phone && (
                     <FormErrorMessage>
-                      {errors.personPhone.message}
+                      {errors.contact_person_phone.message}
                     </FormErrorMessage>
                   )}
                 </FormControl>
-                <FormControl isInvalid={Boolean(errors.email)}>
+                <FormControl isInvalid={!!errors.contact_person_email}>
                   <FormLabel htmlFor='contact-person-email'>
                     Contact Person Email
                   </FormLabel>
@@ -144,10 +175,12 @@ export function CompaniesPage() {
                     type='email'
                     id='contact-person-email'
                     placeholder='Eg. someone@example.com'
-                    {...register('email')}
+                    {...register('contact_person_email')}
                   />
-                  {errors.email && (
-                    <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+                  {errors.contact_person_email && (
+                    <FormErrorMessage>
+                      {errors.contact_person_email.message}
+                    </FormErrorMessage>
                   )}
                 </FormControl>
               </VStack>
@@ -193,77 +226,80 @@ export function CompaniesPage() {
 }
 
 type TCompaniesData = {
-  companyName: string;
-  personName: string;
-  personPhone: string;
-  personEmail: string;
-  jobPosted: number;
-  studentPlaced: number;
+  company_name: string;
+  contact_person_email: string;
+  contact_person_name: string;
+  contact_person_phone: string;
+  id: number;
+  job_count: number;
+  student_count: number;
 };
 function CompaniesTable() {
   const columns = useMemo<Column<TCompaniesData>[]>(
     () => [
       {
         Header: 'Company Name',
-        accessor: 'companyName',
+        accessor: 'company_name',
       },
       {
         Header: 'Contact Person Name',
-        accessor: 'personName',
+        accessor: 'contact_person_name',
       },
       {
         Header: 'Contact Person Phone',
-        accessor: 'personPhone',
+        accessor: 'contact_person_phone',
       },
       {
         Header: 'Contact Person Email',
-        accessor: 'personEmail',
+        accessor: 'contact_person_email',
       },
       {
         Header: 'No. of Job Posted',
-        accessor: 'jobPosted',
+        accessor: 'job_count',
       },
       {
         Header: 'No. of Student Placed',
-        accessor: 'studentPlaced',
+        accessor: 'student_count',
       },
     ],
     []
   );
-  const data = useMemo<TCompaniesData[]>(
-    () => [
-      {
-        companyName: 'Laxmi Chit Fund',
-        personName: 'Anuradha',
-        personPhone: '9123456789',
-        personEmail: 'info@laxmichitfund.co',
-        jobPosted: 1,
-        studentPlaced: 99999999,
-      },
-      {
-        companyName: 'SpaceX Inc.',
-        personName: 'Elon Musk',
-        personPhone: '9865758612856',
-        personEmail: 'info@teslamotor.com',
-        jobPosted: 10,
-        studentPlaced: 69,
-      },
-      {
-        companyName: 'Vestige India Pvt. Ltd.',
-        personName: 'Mr. Bal',
-        personPhone: '968745236575',
-        personEmail: 'info@vestigetalent.in',
-        jobPosted: 69,
-        studentPlaced: 45,
-      },
-    ],
-    []
+
+  const { data, isLoading, isError, refetch } = useQuery<TCompaniesData[]>(
+    'secure/college/companies',
+    {
+      initialData: [],
+    }
   );
+
+  const _data = data!;
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable<TCompaniesData>({
       columns,
-      data,
+      data: _data,
     });
+  if (isError)
+    return (
+      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
+        <Icon name='error' style={{ fontSize: '3em' }} />
+        <Text>Failed to load data.</Text>
+        <Button
+          variant='outline'
+          colorScheme='red'
+          isLoading={isLoading}
+          onClick={() => refetch()}
+        >
+          Retry
+        </Button>
+      </VStack>
+    );
+  if (isLoading)
+    return (
+      <VStack p='8' borderColor='gray.200' borderWidth='thin' borderRadius='md'>
+        <Spinner />
+        <Text>Loading Data...</Text>
+      </VStack>
+    );
   return (
     <TableContainer border='1px' borderColor='gray.100' borderRadius='md'>
       <Table variant='striped' size='md' {...getTableProps()}>
