@@ -7,11 +7,15 @@ import {
   ButtonGroup,
   Container,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Heading,
   HStack,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -38,7 +42,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import NiceModal from '@ebay/nice-modal-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
@@ -385,6 +391,68 @@ function AdditionalDocumentsForm() {
   );
 }
 
+// regex for password with at least 8 characters including 1 number, 1 special charater
+// ref: https://stackoverflow.com/questions/12090077/javascript-regular-expression-password-validation-having-special-characters
+const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+const PasswordInput = z.object({
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      'Password must contain at least 8 characters including 1 number and 1 special character'
+    ),
+});
+
+type PasswordInputType = z.infer<typeof PasswordInput>;
+
 function AccountTab() {
-  return <Text>Account</Text>;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<PasswordInputType>({ resolver: zodResolver(PasswordInput) });
+
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+
+  const onChange: SubmitHandler<PasswordInputType> = (values) => {
+    console.log(values);
+  };
+
+  return (
+    <VStack align='stretch' spacing='4'>
+      {/* Change Password */}
+      <Text fontWeight='semibold'>Change Password</Text>
+      <FormControl isInvalid={!!errors.password} maxW='sm'>
+        <FormLabel htmlFor='new-password'>New Password</FormLabel>
+        <InputGroup>
+          <Input
+            pr='4.5rem'
+            type={show ? 'text' : 'password'}
+            placeholder='Enter new password'
+            autoComplete='new-password'
+            {...register('password')}
+          />
+          <InputRightElement width='4.5rem'>
+            <Button h='1.75rem' size='sm' onClick={handleClick}>
+              {show ? 'Hide' : 'Show'}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+        {errors.password && (
+          <FormErrorMessage>{errors.password.message}</FormErrorMessage>
+        )}
+      </FormControl>
+      {/* Button */}
+      <ButtonGroup spacing='6'>
+        <Button
+          colorScheme='blue'
+          onClick={handleSubmit(onChange)}
+          isLoading={isSubmitting}
+        >
+          Update Password
+        </Button>
+      </ButtonGroup>
+    </VStack>
+  );
 }
