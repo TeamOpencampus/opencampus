@@ -2,6 +2,8 @@ import {
   Button,
   ButtonGroup,
   FormControl,
+  FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -20,11 +22,11 @@ import { z } from 'zod';
 
 export const WorkProfileSchema = z.object({
   id: z.number().optional(),
-  company: z.string().nonempty(),
-  start_date: z.string().nonempty(),
-  end_date: z.string().nonempty(),
-  salary: z.string().nonempty(),
-  position: z.string().nonempty(),
+  company: z.string().nonempty('Company name required'),
+  start_date: z.string().nonempty('Enter Start date'),
+  end_date: z.string().nonempty('Enter end date'),
+  salary: z.string().nonempty('Salary required'),
+  position: z.string().nonempty('Enter position'),
 });
 
 type TWorkProfileSchema = z.infer<typeof WorkProfileSchema>;
@@ -71,6 +73,12 @@ export default NiceModal.create<TWorkProfileSchema>((data) => {
                 id='company'
                 {...register('company')}
               />
+
+              {errors.company ? (
+                <FormErrorMessage>{errors.company.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>Previous Company Name</FormHelperText>
+              )}
             </FormControl>
             {/* Start Date */}
             <FormControl>
@@ -81,6 +89,12 @@ export default NiceModal.create<TWorkProfileSchema>((data) => {
                 id='start_date_exp'
                 {...register('start_date')}
               />
+
+              {errors.start_date ? (
+                <FormErrorMessage>{errors.start_date.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>Previous job start date</FormHelperText>
+              )}
             </FormControl>
             {/* End Date */}
             <FormControl>
@@ -91,6 +105,11 @@ export default NiceModal.create<TWorkProfileSchema>((data) => {
                 id='end_date_exp'
                 {...register('end_date')}
               />
+              {errors.end_date ? (
+                <FormErrorMessage>{errors.end_date.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>Previous job end date</FormHelperText>
+              )}
             </FormControl>
             {/* Last Salary */}
             <FormControl>
@@ -101,6 +120,12 @@ export default NiceModal.create<TWorkProfileSchema>((data) => {
                 id='last_salary'
                 {...register('salary')}
               />
+
+              {errors.salary ? (
+                <FormErrorMessage>{errors.salary.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>Salary of previous company</FormHelperText>
+              )}
             </FormControl>
             {/* Position */}
             <FormControl>
@@ -110,6 +135,11 @@ export default NiceModal.create<TWorkProfileSchema>((data) => {
                 id='position'
                 {...register('position')}
               />
+              {errors.position ? (
+                <FormErrorMessage>{errors.position.message}</FormErrorMessage>
+              ) : (
+                <FormHelperText>Position at previous company</FormHelperText>
+              )}
             </FormControl>
           </VStack>
         </ModalBody>
