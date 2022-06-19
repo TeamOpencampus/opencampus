@@ -1,4 +1,5 @@
 import { useAuthAction } from '@/actions/auth.action';
+import { AuthFormWrapper } from '@/components/AuthFormWrapper';
 import authAtom from '@/state/authAtom';
 import {
   Box,
@@ -23,26 +24,54 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
+import { useQuery } from 'react-query';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
+import { LoadingPage } from '../LoadingPage';
+import { CollegeOnboardingPage, OnboardingPage } from './OnboardingPage';
 
 export function DashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
+  const { data, isLoading, isError, refetch } = useQuery('secure/onboarding');
+  const auth = useRecoilValue(authAtom);
   return (
     <WithAuthentication>
-      <>
-        {/* Topbar */}
-        <TopBar onOpen={onOpen} btnRef={btnRef} />
-        {/* Sidebar */}
-        <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
-        {/* Content */}
-        <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
-          <Outlet />
-        </Box>
-      </>
+      {isError ? (
+        <AuthFormWrapper>
+          <VStack px='8' spacing='4'>
+            <Icon name='error' style={{ fontSize: '3em' }} />
+            <Text>Failed to load data.</Text>
+            <Button
+              variant='outline'
+              colorScheme='red'
+              isLoading={isLoading}
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          </VStack>
+        </AuthFormWrapper>
+      ) : isLoading ? (
+        <LoadingPage />
+      ) : data ? (
+        <>
+          {/* Topbar */}
+          <TopBar onOpen={onOpen} btnRef={btnRef} />
+          {/* Sidebar */}
+          <SideBar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
+          {/* Content */}
+          <Box ml={['0px', '60']} mt={['16', '0px']} p='4'>
+            <Outlet />
+          </Box>
+        </>
+      ) : auth?.role === 'user' ? (
+        <OnboardingPage />
+      ) : (
+        <CollegeOnboardingPage />
+      )}
     </WithAuthentication>
   );
 }

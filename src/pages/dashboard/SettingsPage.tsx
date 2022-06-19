@@ -1,5 +1,6 @@
 import { Icon } from '@/components/Icon';
 import { windwalker } from '@/data/windwalker';
+import authAtom from '@/state/authAtom';
 import {
   Avatar,
   Box,
@@ -40,6 +41,7 @@ import {
   Td,
   Text,
   Tr,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import NiceModal from '@ebay/nice-modal-react';
@@ -48,6 +50,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { z } from 'zod';
 import AcademicProfileModal, {
   AcademicProfileSchema,
@@ -63,6 +66,7 @@ export function SettingsPage() {
   const keys = ['profile', 'account'];
   const activeIndex = keys.indexOf(params.get('active') ?? '');
   const setActiveIndex = (index: number) => setParams({ active: keys[index] });
+  const auth = useRecoilValue(authAtom);
 
   return (
     <VStack align='stretch' spacing='2'>
@@ -79,7 +83,7 @@ export function SettingsPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ProfileTab />
+            {auth?.role === 'user' ? <ProfileTab /> : <CollegeProfileTab />}
           </TabPanel>
           <TabPanel>
             <AccountTab />
@@ -271,6 +275,150 @@ function ProfileTab() {
         </VStack>
       </VStack>
     </Container>
+  );
+}
+
+export const CollegeProfileSchema = z.object({
+  name: z.string().nonempty(),
+  phone: z.string().nonempty(),
+  address: z.string().nonempty(),
+  type: z.string().nonempty(),
+});
+
+export type TCollegeProfileSchema = z.infer<typeof CollegeProfileSchema>;
+
+function CollegeProfileTab() {
+  const { data, isLoading, isError, refetch } = useQuery<TCollegeProfileSchema>(
+    'secure/college/profile'
+  );
+
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm({
+    defaultValues: data,
+    resolver: zodResolver(CollegeProfileSchema),
+  });
+
+  const toast = useToast({
+    position: 'bottom',
+    isClosable: true,
+  });
+  const queryClient = useQueryClient();
+  const mutation = useMutation<string, string, Record<string, any>>(
+    (data) => windwalker.post('secure/college/profile', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('secure/college/profile');
+      },
+    }
+  );
+
+  const onSave: SubmitHandler<TCollegeProfileSchema> = (values) => {
+    try {
+      mutation.mutateAsync(values);
+      toast({
+        status: 'success',
+        title: 'Successfully updatedprofile.',
+      });
+    } catch (err) {
+      toast({
+        status: 'error',
+        title: 'Failed to update profile.',
+      });
+    }
+  };
+
+  if (isError)
+    return (
+      <Container maxW='container.lg'>
+        <VStack
+          spacing='4'
+          borderRadius='md'
+          borderColor='gray.200'
+          borderWidth='1px'
+          padding='8'
+          w='full'
+        >
+          <Icon name='error' style={{ fontSize: 48 }} />
+          <Text>Unable to load profile data.</Text>
+          <Button variant='outline' colorScheme='red' onClick={() => refetch()}>
+            Retry
+          </Button>
+        </VStack>
+      </Container>
+    );
+  if (isLoading)
+    return (
+      <Container maxW='container.lg'>
+        <SkeletonCircle size='20' />
+        <SkeletonText mt='4' noOfLines={6} lineHeight='8' spacing='4' />
+      </Container>
+    );
+
+  return (
+    <VStack align='flex-start' spacing='4' maxW='sm'>
+      {/* Full Name */}
+      <FormControl isInvalid={!!errors.name}>
+        <FormLabel htmlFor='full-name'>Full Name</FormLabel>
+        <Input id='full-name' {...register('name')} />
+        {errors.name ? (
+          <FormErrorMessage>{errors.name.message}</FormErrorMessage>
+        ) : (
+          <FormHelperText>Enter institution name.</FormHelperText>
+        )}
+      </FormControl>
+      {/* Phone Number */}
+      <FormControl isInvalid={!!errors.phone}>
+        <FormLabel htmlFor='phone'>Phone Number</FormLabel>
+        <Input id='phone' {...register('phone')} />
+        {errors.phone && (
+          <FormErrorMessage>{errors.phone.message}</FormErrorMessage>
+        )}
+      </FormControl>
+      {/* Address */}
+      <FormControl isInvalid={!!errors.address}>
+        <FormLabel htmlFor='address'>Address</FormLabel>
+        <Input id='address' {...register('address')} />
+        {errors.address && (
+          <FormErrorMessage>{errors.address.message}</FormErrorMessage>
+        )}
+      </FormControl>
+      {/* Type */}
+      <FormControl isInvalid={!!errors.type}>
+        <FormLabel htmlFor='type'>Type</FormLabel>
+        <Select placeholder='Select type' id='type' {...register('type')}>
+          {[
+            'Secondary',
+            'Higher Secondary',
+            'Diploma',
+            'B.Sc',
+            'M.Sc',
+            'B.Tech',
+            'M.Tech',
+          ].map((e, i) => (
+            <option key={i} value={e}>
+              {e}
+            </option>
+          ))}
+        </Select>
+        {errors.type && (
+          <FormErrorMessage>{errors.type.message}</FormErrorMessage>
+        )}
+      </FormControl>
+      <ButtonGroup>
+        <Button onClick={reset}>Reset</Button>
+        <Button
+          colorScheme='blue'
+          isLoading={isSubmitting}
+          onClick={handleSubmit(onSave)}
+        >
+          Save
+        </Button>
+      </ButtonGroup>
+    </VStack>
   );
 }
 

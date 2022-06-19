@@ -1,12 +1,15 @@
-import { Box, Container, Flex, Image } from '@chakra-ui/react';
+import { useAuthAction } from '@/actions/auth.action';
+import authAtom from '@/state/authAtom';
+import { Box, Button, Container, Flex, Image, VStack } from '@chakra-ui/react';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
 export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
   props
 ) => {
-  // const user = useAppSelector((state) => state.auth.user);
-  // const logOutHandler = () => signOut(getAuth());
-  const logOutHandler = () => {};
+  const auth = useRecoilValue(authAtom);
+  const action = useAuthAction();
+
   return (
     <Container>
       <Flex
@@ -28,14 +31,13 @@ export const AuthFormWrapper: React.FC<{ children: React.ReactNode }> = (
         >
           {props.children}
         </Box>
-        {/*user && (
+        {auth && (
           <VStack mt='8' maxW='sm'>
-            <Text fontSize='sm'>Not {user.email} ?</Text>
-            <Button variant='ghost' size='sm' onClick={logOutHandler}>
+            <Button variant='ghost' size='sm' onClick={action.logout}>
               Log Out
             </Button>
           </VStack>
-        )*/}
+        )}
       </Flex>
     </Container>
   );
