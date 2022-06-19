@@ -225,7 +225,7 @@ export function CompaniesPage() {
             Add Company
           </Button>
         </HStack>
-        {isError && (
+        {isError ? (
           <VStack
             p='8'
             borderColor='gray.200'
@@ -243,8 +243,7 @@ export function CompaniesPage() {
               Retry
             </Button>
           </VStack>
-        )}
-        {isLoading && (
+        ) : isLoading ? (
           <VStack
             p='8'
             borderColor='gray.200'
@@ -254,9 +253,7 @@ export function CompaniesPage() {
             <Spinner />
             <Text>Loading Data...</Text>
           </VStack>
-        )}
-
-        {!data ? (
+        ) : !data ? (
           <VStack
             p='8'
             borderColor='gray.200'
