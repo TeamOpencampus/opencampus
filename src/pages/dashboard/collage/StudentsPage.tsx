@@ -1,14 +1,12 @@
 import { Icon } from '@/components/Icon';
 import {
   Button,
-  ButtonGroup,
   CircularProgress,
   CircularProgressLabel,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Heading,
   HStack,
   Input,
   Modal,
@@ -29,11 +27,12 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Column, useTable } from 'react-table';
 import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import Scaffold from '../Scaffold';
 
 // Modal form validation object schema
 const FormSchema = z.object({
@@ -62,7 +61,22 @@ export function StudentsPage() {
   };
 
   return (
-    <>
+    <Scaffold
+      title='Students'
+      actions={[
+        <Button
+          leftIcon={<Icon name='person_add' />}
+          onClick={onOpen}
+          ref={finalRef}
+          colorScheme='blue'
+        >
+          Invite
+        </Button>,
+        <Button variant='outline' colorScheme='blue' disabled>
+          Export
+        </Button>,
+      ]}
+    >
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -112,21 +126,6 @@ export function StudentsPage() {
       </Modal>
 
       <VStack spacing='4' align='stretch'>
-        <HStack justify='space-between' align='center'>
-          <Heading>Students</Heading>
-          <ButtonGroup colorScheme='blue' size='sm' isAttached>
-            <Button
-              leftIcon={<Icon name='person_add' />}
-              onClick={onOpen}
-              ref={finalRef}
-            >
-              Invite
-            </Button>
-            <Button variant='outline' disabled>
-              Export
-            </Button>
-          </ButtonGroup>
-        </HStack>
         {/* TODO: Implement filtering logic */}
         <Wrap spacing='2'>
           <Button
@@ -140,7 +139,7 @@ export function StudentsPage() {
         </Wrap>
         <StudentsTable />
       </VStack>
-    </>
+    </Scaffold>
   );
 }
 

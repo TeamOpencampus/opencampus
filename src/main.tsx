@@ -3,6 +3,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider, QueryFunction } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -46,7 +47,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <ChakraProvider theme={theme}>
           <NiceModal.Provider>
             <BrowserRouter>
-              <App />
+              <HelmetProvider>
+                <App />
+              </HelmetProvider>
             </BrowserRouter>
           </NiceModal.Provider>
         </ChakraProvider>

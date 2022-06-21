@@ -7,7 +7,6 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Heading,
   HStack,
   Input,
   InputGroup,
@@ -38,6 +37,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Column, useTable } from 'react-table';
 import { z } from 'zod';
+import Scaffold from '../Scaffold';
 
 // Modal form validation schema
 const FormSchema = z.object({
@@ -100,7 +100,19 @@ export function CompaniesPage() {
   };
 
   return (
-    <>
+    <Scaffold
+      title='Companies'
+      actions={[
+        <Button
+          colorScheme='blue'
+          leftIcon={<Icon name='add' />}
+          onClick={onOpen}
+          ref={finalRef}
+        >
+          Add Company
+        </Button>,
+      ]}
+    >
       {/* Add Company Modal Starts */}
       <Modal
         isOpen={isOpen}
@@ -213,18 +225,6 @@ export function CompaniesPage() {
       {/* Add Company modal ends */}
 
       <VStack spacing='4' align='stretch'>
-        <HStack justify='space-between' align='center'>
-          <Heading>Companies</Heading>
-          <Button
-            colorScheme='blue'
-            size='sm'
-            leftIcon={<Icon name='add' />}
-            onClick={onOpen}
-            ref={finalRef}
-          >
-            Add Company
-          </Button>
-        </HStack>
         {isError && (
           <VStack
             p='8'
@@ -269,7 +269,7 @@ export function CompaniesPage() {
           <CompaniesTable data={data} />
         )}
       </VStack>
-    </>
+    </Scaffold>
   );
 }
 

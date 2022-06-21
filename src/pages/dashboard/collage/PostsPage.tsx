@@ -8,7 +8,6 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Heading,
   HStack,
   Input,
   Modal,
@@ -28,6 +27,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
+import Scaffold from '../Scaffold';
 
 const CompanyNames = [
   {
@@ -68,7 +68,18 @@ export function PostsPage() {
   };
 
   return (
-    <>
+    <Scaffold
+      title='Posts'
+      actions={[
+        <Button
+          leftIcon={<Icon name='add' />}
+          colorScheme='blue'
+          onClick={onOpen}
+        >
+          New Post
+        </Button>,
+      ]}
+    >
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -189,14 +200,7 @@ export function PostsPage() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <VStack spacing='4' align='stretch'>
-        <HStack justify='space-between' align='center'>
-          <Heading>Posts</Heading>
-          <Button leftIcon={<Icon name='add' />} onClick={onOpen}>
-            New Post
-          </Button>
-        </HStack>
-      </VStack>
-    </>
+      <VStack spacing='4' align='stretch'></VStack>
+    </Scaffold>
   );
 }
