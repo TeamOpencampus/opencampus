@@ -37,6 +37,17 @@ If you found any bug or want a new feature in the app, then consider creating an
 - Quizzes
 - and much more...
 
+## 💖 Acknowledgement
+
+- We're grateful to have Mr. Samaresh Hazra as our Internal Project Guide
+- Really Thankful to [@BhaskarAcharjee](https://github.com/BhaskarAcharjee) for the Logo
+
+## ✨ Contributors
+
+<a href="https://github.com/TeamOpencampus/opencampus/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=TeamOpencampus/opencampus" />
+</a>
+
 ## 📜 License
 
 [GNU General Public License v3.0](LICENSE.md)
