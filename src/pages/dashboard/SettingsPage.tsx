@@ -24,6 +24,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Portal,
+  Select,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -452,6 +453,31 @@ function AccountTab() {
         >
           Update Password
         </Button>
+      </ButtonGroup>
+      <JoinCollege />
+    </VStack>
+  );
+}
+
+function JoinCollege() {
+  return (
+    <VStack align='stretch' spacing='4'>
+      {/* Select Colleges*/}
+      <FormControl maxW='sm'>
+        <FormLabel htmlFor='college' fontWeight='semibold'>
+          Select Colleges
+        </FormLabel>
+        <Select placeholder='Select college' id='college'>
+          <option value='college-1'>Central Calcutta Polytechnic</option>
+          <option value='college-2'>APC Roy Polytechnic</option>
+          <option value='college-3'>Birla Institute of Technology</option>
+          <option value='college-4'>RKM Shilpapith</option>
+          <option value='college-5'>RKM Shilpamandira</option>
+        </Select>
+      </FormControl>
+      {/* Submit Button  */}
+      <ButtonGroup spacing='6'>
+        <Button colorScheme='blue'>Submit</Button>
       </ButtonGroup>
     </VStack>
   );
