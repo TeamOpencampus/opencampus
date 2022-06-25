@@ -22,6 +22,7 @@ function Scaffold(props: ScaffoldProps) {
         shadow='sm'
         pos='sticky'
         top='0'
+        zIndex='sticky'
         justify='space-between'
         align='center'
       >

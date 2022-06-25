@@ -14,6 +14,7 @@
     "@emotion/styled": "^11",
     "@hookform/resolvers": "^2.8.8",
     "axios": "^0.27.2",
+    "dayjs": "^1.11.3",
     "framer-motion": "^6",
     "md5-hex": "^4.0.0",
     "normalizr": "^3.6.2",

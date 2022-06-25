@@ -13,7 +13,7 @@ import './index.css';
 const theme = extendTheme({
   fonts: {
     heading: 'Lora, serif',
-    body: 'Work Sans, sans-serif',
+    body: 'Poppins, sans-serif',
   },
 });
 

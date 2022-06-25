@@ -1,4 +1,5 @@
 import { useAuthAction } from '@/actions/auth.action';
+import { TProfile } from '@/model/TProfile';
 import authAtom from '@/state/authAtom';
 import {
   Box,
@@ -15,31 +16,90 @@ import {
   HStack,
   IconButton,
   Image,
+  Spinner,
   Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
+import NiceModal from '@ebay/nice-modal-react';
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useQuery } from 'react-query';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { Icon } from '../../components/Icon';
 import { WithAuthentication } from '../../components/WithAuthentication';
+import CollegeProfileModal from './collage/modals/ProfileModal';
+import StudentProfileModal from './student/modals/ProfileModal';
 
 function HomePage() {
   return (
     <WithAuthentication>
-      <>
-        <Helmet>
-          <title>Home | OpenCampus</title>
-        </Helmet>
-        <TopBar />
-        <SideBar />
-        <Box ml={['0px', '60']} mt={['16', '0px']}>
-          <Outlet />
-        </Box>
-      </>
+      <HomePageContent />
     </WithAuthentication>
+  );
+}
+
+function HomePageContent() {
+  const { data, isLoading, isError, refetch } = useQuery<TProfile>('secure/me');
+
+  const onCreate = () => {
+    if (data?.role === 'college') NiceModal.show(CollegeProfileModal);
+    else NiceModal.show(StudentProfileModal);
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>Home | OpenCampus</title>
+      </Helmet>
+      <TopBar />
+      <SideBar />
+      <VStack ml={['0px', '60']} mt={['16', '0px']} align='stretch' spacing='0'>
+        {isError ? (
+          <HStack px='4' py='2' bg='gray.200' align='center' justify='center'>
+            <Icon name='error' />
+            <Text>Error loading profile</Text>
+            <Button
+              size='xs'
+              variant='outline'
+              colorScheme='red'
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          </HStack>
+        ) : isLoading ? (
+          <HStack px='4' py='2' bg='gray.200' align='center' justify='center'>
+            <Spinner size='sm' />
+            <Text>Loading profile...</Text>
+          </HStack>
+        ) : (
+          !(data?.role === 'college'
+            ? !!data?.edges.college_profile
+            : !!data?.edges.student_profile) && (
+            <HStack
+              px='4'
+              py='2'
+              bg='green.100'
+              align='center'
+              justify='center'
+            >
+              <Text>Your profile does not exist</Text>
+              <Button
+                colorScheme='blue'
+                variant='outline'
+                size='xs'
+                onClick={onCreate}
+              >
+                Create Now
+              </Button>
+            </HStack>
+          )
+        )}
+        <Outlet />
+      </VStack>
+    </>
   );
 }
 
@@ -149,6 +209,7 @@ function NavLinks() {
       { icon: 'receipt_long', label: 'My Assessments', path: 'assessments' },
       { icon: 'fact_check', label: 'My Interviews', path: 'interviews' },
       { icon: 'account_circle', label: 'My Profile', path: 'profile' },
+      { icon: 'settings', label: 'Settings', path: '/settings' },
     ],
     []
   );
