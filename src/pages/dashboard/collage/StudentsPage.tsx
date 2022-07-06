@@ -1,4 +1,5 @@
 import { Icon } from '@/components/Icon';
+import { TProfile } from '@/model/TProfile';
 import {
   Button,
   CircularProgress,
@@ -16,10 +17,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -30,6 +33,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useQuery } from 'react-query';
 import { Column, useTable } from 'react-table';
 import z from 'zod';
 import Scaffold from '../Scaffold';
@@ -46,6 +50,10 @@ export function StudentsPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
+
+  const { data, isLoading, isError, refetch } = useQuery<TProfile[]>(
+    'secure/college/students'
+  );
 
   const {
     register,
@@ -137,7 +145,55 @@ export function StudentsPage() {
             Add Filter
           </Button>
         </Wrap>
-        <StudentsTable />
+        {isError ? (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Icon name='error' style={{ fontSize: '3em' }} />
+            <Text>Failed to load data.</Text>
+            <Button
+              variant='outline'
+              colorScheme='red'
+              isLoading={isLoading}
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          </VStack>
+        ) : isLoading ? (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Spinner />
+            <Text>Loading Data...</Text>
+          </VStack>
+        ) : !data ? (
+          <VStack
+            p='8'
+            borderColor='gray.200'
+            borderWidth='thin'
+            borderRadius='md'
+          >
+            <Text>No records. Add more companies.</Text>
+          </VStack>
+        ) : (
+          <StudentsTable
+            data={data.map((e) => ({
+              email: e.email,
+              name: e.edges.student_profile?.name!,
+              appearedIn: 0,
+              selectedIn: 0,
+              phone: e.edges.student_profile?.phone!,
+              profileCompleted: 0,
+            }))}
+          />
+        )}
       </VStack>
     </Scaffold>
   );
@@ -151,7 +207,8 @@ type TStudentsData = {
   appearedIn: number;
   profileCompleted: number;
 };
-function StudentsTable() {
+
+function StudentsTable({ data }: { data: TStudentsData[] }) {
   const columns = useMemo<Column<TStudentsData>[]>(
     () => [
       {
@@ -186,19 +243,7 @@ function StudentsTable() {
     ],
     []
   );
-  const data = useMemo<TStudentsData[]>(
-    () => [
-      {
-        name: 'Example User',
-        email: 'someone@example.com',
-        phone: '+1 1234567890',
-        selectedIn: 1,
-        appearedIn: 4,
-        profileCompleted: 25,
-      },
-    ],
-    []
-  );
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable<TStudentsData>({
       columns,
@@ -206,7 +251,7 @@ function StudentsTable() {
     });
   return (
     <TableContainer border='1px' borderColor='gray.100' borderRadius='md'>
-      <Table variant='striped' size='md' {...getTableProps()}>
+      <Table variant='striped' size='sm' {...getTableProps()}>
         <Thead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>

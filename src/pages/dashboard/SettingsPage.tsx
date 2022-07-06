@@ -1,339 +1,57 @@
 import { Icon } from '@/components/Icon';
 import { windwalker } from '@/data/windwalker';
+import { TProfile } from '@/model/TProfile';
+import authAtom from '@/state/authAtom';
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
-  Container,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Heading,
-  HStack,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Portal,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
-  SkeletonCircle,
-  SkeletonText,
+  Spinner,
   Stack,
   StackDivider,
-  Tab,
-  Table,
-  TableContainer,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tbody,
-  Td,
+  Tag,
   Text,
-  Tr,
+  useToast,
   VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import { z } from 'zod';
-import AcademicProfileModal, {
-  AcademicProfileSchema,
-  TAcademicProfileSchema,
-} from './profile/AcademicProfileModal';
-import BasicProfileModal, {
-  BasicProfileSchema,
-} from './profile/BasicProfileModal';
-import WorkProfileModal from './profile/WorkProfileModal';
+import Scaffold from './Scaffold';
 
 export function SettingsPage() {
-  const [params, setParams] = useSearchParams();
-  const keys = ['profile', 'account'];
-  const activeIndex = keys.indexOf(params.get('active') ?? '');
-  const setActiveIndex = (index: number) => setParams({ active: keys[index] });
-
+  const auth = useRecoilValue(authAtom);
+  const role = auth?.role;
   return (
-    <VStack align='stretch' spacing='2'>
-      <Heading>Settings</Heading>
-      <Tabs
-        isLazy
-        colorScheme='messenger'
-        index={activeIndex === -1 ? 0 : activeIndex}
-        onChange={setActiveIndex}
-      >
-        <TabList>
-          <Tab>Profile</Tab>
-          <Tab>Account</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <ProfileTab />
-          </TabPanel>
-          <TabPanel>
-            <AccountTab />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </VStack>
+    <Scaffold title='Settings'>
+      <VStack spacing='6' align='flex-start' maxW='sm'>
+        <ChangePasswordForm />
+        {role === 'student' && <JoinCollegeForm />}
+      </VStack>
+    </Scaffold>
   );
 }
-
-const ProfileSchema = z.object({
-  id: z.number().optional(),
-  basic_profile: BasicProfileSchema,
-  academic_profile: z.array(AcademicProfileSchema),
-  work_profile: z.array(
-    z.object({
-      id: z.number().optional(),
-      company: z.string().nonempty(),
-      start_date: z.string().nonempty(),
-      end_date: z.string().nonempty(),
-      salary: z.string().nonempty(),
-      position: z.string().nonempty(),
-    })
-  ),
-  additional_documents: z.object({}),
-});
-
-export type TProfileSchema = z.infer<typeof ProfileSchema>;
-
-function ProfileTab() {
-  const { data, isLoading, isError, refetch } =
-    useQuery<TProfileSchema>('secure/profile/');
-
-  if (isError)
-    return (
-      <Container maxW='container.lg'>
-        <VStack
-          spacing='4'
-          borderRadius='md'
-          borderColor='gray.200'
-          borderWidth='1px'
-          padding='8'
-          w='full'
-        >
-          <Icon name='error' style={{ fontSize: 48 }} />
-          <Text>Unable to load profile data.</Text>
-          <Button variant='outline' colorScheme='red' onClick={() => refetch()}>
-            Retry
-          </Button>
-        </VStack>
-      </Container>
-    );
-  if (isLoading)
-    return (
-      <Container maxW='container.lg'>
-        <SkeletonCircle size='20' />
-        <SkeletonText mt='4' noOfLines={6} lineHeight='8' spacing='4' />
-      </Container>
-    );
-
-  return (
-    <Container maxW='container.lg'>
-      <VStack>
-        {/* Basic */}
-        <VStack
-          spacing='4'
-          borderRadius='md'
-          borderColor='gray.200'
-          borderWidth='1px'
-          padding='4'
-          w='full'
-        >
-          <HStack justify='space-between' align='stretch' w='full'>
-            <HStack spacing='4'>
-              <Avatar name={data?.basic_profile.name} bg='gray.300' />
-              <VStack align='flex-start' spacing='-1'>
-                <Text fontSize='xl'>{data?.basic_profile.name}</Text>
-                <Text fontSize='sm'>+91 {data?.basic_profile.phone}</Text>
-              </VStack>
-            </HStack>
-            <IconButton
-              icon={<Icon name='edit' />}
-              aria-label='edit'
-              onClick={() =>
-                NiceModal.show(BasicProfileModal, data?.basic_profile)
-              }
-            />
-          </HStack>
-          <VStack align='stretch' justify='stretch' w='full'>
-            <TableContainer>
-              <Table variant='unstyled' size='lg'>
-                <Tbody>
-                  <Tr>
-                    <Td>Gender</Td>
-                    <Td>{data?.basic_profile.gender}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Caste</Td>
-                    <Td>{data?.basic_profile.caste}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Nationality</Td>
-                    <Td>{data?.basic_profile.nationality}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </VStack>
-        </VStack>
-        {/* Education */}
-        <VStack
-          spacing='2'
-          borderRadius='md'
-          borderColor='gray.200'
-          borderWidth='1px'
-          padding='4'
-          w='full'
-        >
-          <HStack justify='space-between' align='stretch' w='full'>
-            <Heading size='md'>Education</Heading>
-            <IconButton
-              icon={<Icon name='add' />}
-              aria-label='Add'
-              onClick={() => NiceModal.show(AcademicProfileModal)}
-            />
-          </HStack>
-          {!data?.academic_profile && <Text>Nothing to see here.</Text>}
-          {data?.academic_profile?.map((e, i) => (
-            <AcademicProfileListItem data={e} key={i} />
-          ))}
-        </VStack>
-        {/* Work */}
-        <VStack
-          spacing='2'
-          borderRadius='md'
-          borderColor='gray.200'
-          borderWidth='1px'
-          padding='4'
-          w='full'
-        >
-          <HStack justify='space-between' align='stretch' w='full'>
-            <Heading size='md'>Work</Heading>
-            <IconButton
-              icon={<Icon name='add' />}
-              aria-label='Add'
-              onClick={() => NiceModal.show(WorkProfileModal)}
-            />
-          </HStack>
-          {!data?.work_profile && <Text>Nothing to see here.</Text>}
-          {data?.work_profile?.map((e, i) => (
-            <HStack align='center' justify='space-between' w='full' key={i}>
-              <VStack align='flex-start' spacing='0.5px'>
-                <Text fontWeight='semibold'>{e.company}</Text>
-                <Text fontSize='sm'>
-                  {e.position} | {e.salary}
-                </Text>
-                <Text fontSize='sm' color='gray'>
-                  {e.start_date} - {e.end_date}
-                </Text>
-              </VStack>
-              <ButtonGroup variant='outline' size='sm'>
-                <IconButton
-                  colorScheme='blue'
-                  aria-label='edit'
-                  icon={<Icon name='edit' />}
-                />
-                <IconButton
-                  colorScheme='red'
-                  aria-label='delete'
-                  icon={<Icon name='delete' />}
-                />
-              </ButtonGroup>
-            </HStack>
-          ))}
-        </VStack>
-        {/* Additional Documents */}
-        <VStack
-          spacing='2'
-          borderRadius='md'
-          borderColor='gray.200'
-          borderWidth='1px'
-          padding='4'
-          w='full'
-        >
-          <HStack justify='space-between' align='stretch' w='full'>
-            <Heading size='md'>Additional Documents</Heading>
-            <IconButton icon={<Icon name='edit' />} aria-label='edit' />
-          </HStack>
-        </VStack>
-      </VStack>
-    </Container>
-  );
-}
-
-const AcademicProfileListItem: React.FC<{ data: TAcademicProfileSchema }> = ({
-  data,
-}) => {
-  const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(
-    () => windwalker.delete(`secure/profile/academic/${data.id}`),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('secure/profile/');
-      },
-    }
-  );
-
-  return (
-    <HStack align='center' justify='space-between' w='full'>
-      <VStack align='flex-start' spacing='0.5px'>
-        <Text fontWeight='semibold'>{data.institute}</Text>
-        <Text fontSize='sm'>
-          {data.course} in {data.department}
-        </Text>
-        <Text fontSize='sm' color='gray'>
-          {data.start_date} - {data.end_date}
-        </Text>
-      </VStack>
-      <ButtonGroup variant='outline' size='sm'>
-        <IconButton
-          colorScheme='blue'
-          aria-label='edit'
-          icon={<Icon name='edit' />}
-          onClick={() => NiceModal.show(AcademicProfileModal, data)}
-        />
-        <Popover>
-          <PopoverTrigger>
-            <IconButton
-              colorScheme='red'
-              aria-label='delete'
-              icon={<Icon name='delete' />}
-            />
-          </PopoverTrigger>
-          <Portal>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverHeader>Delete this item ?</PopoverHeader>
-              <PopoverCloseButton />
-              <PopoverBody>
-                <Button
-                  colorScheme='red'
-                  onClick={() => mutate()}
-                  isLoading={isLoading}
-                >
-                  Sure, delete it
-                </Button>
-              </PopoverBody>
-            </PopoverContent>
-          </Portal>
-        </Popover>
-      </ButtonGroup>
-    </HStack>
-  );
-};
 
 function AdditionalDocumentsForm() {
   return (
@@ -406,7 +124,7 @@ const PasswordInput = z.object({
 
 type PasswordInputType = z.infer<typeof PasswordInput>;
 
-function AccountTab() {
+function ChangePasswordForm() {
   const {
     register,
     handleSubmit,
@@ -421,7 +139,14 @@ function AccountTab() {
   };
 
   return (
-    <VStack align='stretch' spacing='4'>
+    <VStack
+      align='stretch'
+      spacing='4'
+      borderWidth='thin'
+      p='4'
+      borderRadius='md'
+      w='full'
+    >
       {/* Change Password */}
       <Text fontWeight='semibold'>Change Password</Text>
       <FormControl isInvalid={!!errors.password} maxW='sm'>
@@ -445,40 +170,159 @@ function AccountTab() {
         )}
       </FormControl>
       {/* Button */}
-      <ButtonGroup spacing='6'>
-        <Button
-          colorScheme='blue'
-          onClick={handleSubmit(onChange)}
-          isLoading={isSubmitting}
-        >
-          Update Password
-        </Button>
-      </ButtonGroup>
-      <JoinCollege />
+      <Button
+        colorScheme='blue'
+        onClick={handleSubmit(onChange)}
+        isLoading={isSubmitting}
+      >
+        Update Password
+      </Button>
     </VStack>
   );
 }
 
-function JoinCollege() {
+const JoinCollegeModal = NiceModal.create(() => {
+  const modal = useModal();
+  const toast = useToast({
+    position: 'bottom',
+    isClosable: true,
+  });
+  const queryClient = useQueryClient();
+  const query = useQuery<TProfile[]>('secure/colleges');
+  const mutation = useMutation<string, string, string>(
+    (data) => windwalker.post(`secure/colleges/join/${data}`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('secure/me');
+        toast({
+          status: 'success',
+          title: 'Successfully enrolled to the institute.',
+        });
+        modal.hide();
+        modal.remove();
+      },
+      onError: () => {
+        toast({
+          status: 'error',
+          title: 'Failed to enroll.',
+        });
+      },
+    }
+  );
+
+  const [value, setValue] = useState<string>('');
+  const handleSubmit = () => {
+    if (value) mutation.mutate(value);
+  };
+
+  const onCancel = () => {
+    modal.hide();
+    modal.remove();
+  };
+
   return (
-    <VStack align='stretch' spacing='4'>
-      {/* Select Colleges*/}
-      <FormControl maxW='sm'>
-        <FormLabel htmlFor='college' fontWeight='semibold'>
-          Select Colleges
-        </FormLabel>
-        <Select placeholder='Select college' id='college'>
-          <option value='college-1'>Central Calcutta Polytechnic</option>
-          <option value='college-2'>APC Roy Polytechnic</option>
-          <option value='college-3'>Birla Institute of Technology</option>
-          <option value='college-4'>RKM Shilpapith</option>
-          <option value='college-5'>RKM Shilpamandira</option>
-        </Select>
-      </FormControl>
-      {/* Submit Button  */}
-      <ButtonGroup spacing='6'>
-        <Button colorScheme='blue'>Submit</Button>
-      </ButtonGroup>
+    <Modal
+      isOpen={modal.visible}
+      onClose={modal.hide}
+      onCloseComplete={modal.remove}
+    >
+      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px)' />
+      <ModalContent>
+        <ModalHeader>Join a college</ModalHeader>
+        <ModalCloseButton />
+        {query.isError ? (
+          <ModalBody>
+            <VStack spacing='4' py='6'>
+              <Icon name='error' style={{ color: 'red', fontSize: '3em' }} />
+              <Text>Failed to fetch colleges.</Text>
+              <Button
+                variant='outline'
+                colorScheme='red'
+                onClick={() => query.refetch()}
+              >
+                Retry
+              </Button>
+            </VStack>
+          </ModalBody>
+        ) : query.isLoading ? (
+          <ModalBody>
+            <VStack spacing='4' py='6'>
+              <Spinner size='xl' />
+              <Text>Loading colleges...</Text>
+            </VStack>
+          </ModalBody>
+        ) : (
+          <>
+            <ModalBody>
+              <FormControl>
+                <FormLabel>Choose a college</FormLabel>
+                <Select
+                  placeholder='Select a college...'
+                  required
+                  onChange={(e) => setValue(e.target.value)}
+                  value={value}
+                >
+                  {query.data?.map((e, i) => (
+                    <option value={e.id}>
+                      {e.edges?.college_profile?.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <ButtonGroup spacing='6'>
+                <Button onClick={onCancel}>Cancel</Button>
+                <Button
+                  colorScheme='blue'
+                  isLoading={mutation.isLoading}
+                  onClick={handleSubmit}
+                >
+                  Save
+                </Button>
+              </ButtonGroup>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  );
+});
+
+function JoinCollegeForm() {
+  const { data, isError, isLoading, refetch } = useQuery<TProfile>('secure/me');
+
+  return (
+    <VStack
+      align='stretch'
+      spacing='4'
+      borderWidth='thin'
+      p='4'
+      borderRadius='md'
+      w='full'
+    >
+      <Text fontWeight='semibold'>Associated Colleges</Text>
+      {isError ? (
+        <Text>Error loading associations</Text>
+      ) : isLoading ? (
+        <Text>Loading...</Text>
+      ) : !data?.edges?.enrolled_in ? (
+        <Text>You are not associated with any institutions.</Text>
+      ) : (
+        <Wrap>
+          {data?.edges?.enrolled_in?.map((e, i) => (
+            <WrapItem key={i}>
+              <Tag colorScheme='blue'>{e.edges?.college_profile?.name}</Tag>
+            </WrapItem>
+          ))}
+        </Wrap>
+      )}
+      <Button
+        colorScheme='blue'
+        onClick={() => NiceModal.show(JoinCollegeModal)}
+      >
+        Join a College
+      </Button>
     </VStack>
   );
 }

@@ -1,5 +1,6 @@
 import { Icon } from '@/components/Icon';
 import { windwalker } from '@/data/windwalker';
+import { TCompany } from '@/model/TProfile';
 import {
   Box,
   Button,
@@ -71,7 +72,7 @@ export function CompaniesPage() {
       },
     }
   );
-  const { data, isLoading, isError, refetch } = useQuery<TCompaniesData[]>(
+  const { data, isLoading, isError, refetch } = useQuery<TCompany[]>(
     'secure/college/companies',
     {
       initialData: [],
@@ -225,7 +226,7 @@ export function CompaniesPage() {
       {/* Add Company modal ends */}
 
       <VStack spacing='4' align='stretch'>
-        {isError && (
+        {isError ? (
           <VStack
             p='8'
             borderColor='gray.200'
@@ -243,8 +244,7 @@ export function CompaniesPage() {
               Retry
             </Button>
           </VStack>
-        )}
-        {isLoading && (
+        ) : isLoading ? (
           <VStack
             p='8'
             borderColor='gray.200'
@@ -254,9 +254,7 @@ export function CompaniesPage() {
             <Spinner />
             <Text>Loading Data...</Text>
           </VStack>
-        )}
-
-        {!data ? (
+        ) : !data ? (
           <VStack
             p='8'
             borderColor='gray.200'
@@ -266,7 +264,9 @@ export function CompaniesPage() {
             <Text>No records. Add more companies.</Text>
           </VStack>
         ) : (
-          <CompaniesTable data={data} />
+          <CompaniesTable
+            data={data.map((e) => ({ ...e, job_count: 0, student_count: 0 }))}
+          />
         )}
       </VStack>
     </Scaffold>
@@ -274,11 +274,11 @@ export function CompaniesPage() {
 }
 
 type TCompaniesData = {
+  id: string;
   company_name: string;
   contact_person_email: string;
   contact_person_name: string;
   contact_person_phone: string;
-  id: number;
   job_count: number;
   student_count: number;
 };
