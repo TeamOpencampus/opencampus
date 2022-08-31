@@ -51,10 +51,42 @@ func (s *AuthServer) Login(
 }
 
 func (s *AuthServer) Register(
-	_ context.Context,
-	_ *connect.Request[authv1.RegisterRequest],
+	ctx context.Context,
+	req *connect.Request[authv1.RegisterRequest],
 ) (*connect.Response[authv1.RegisterResponse], error) {
-	panic("not implemented") // TODO: Implement
+	// generate password hash
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Msg.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	// create user
+	user, err := s.Client.
+		User.
+		Create().
+		SetEmail(req.Msg.Email).
+		SetPassword(string(hash)).
+		Save(ctx)
+
+	if err != nil {
+		return nil, connect.NewError(connect.CodeAlreadyExists, err)
+	}
+
+	// return token
+	accessToken, err := NewSignedToken(user.ID.String(), time.Now().Add(time.Hour))
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	refreshToken, err := NewSignedToken(user.ID.String(), time.Now().Add(time.Hour*24*7))
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	return connect.NewResponse(&authv1.RegisterResponse{
+		Type:         "bearer",
+		ExpiresAt:    time.Now().Add(time.Hour).String(),
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}), nil
 }
 
 func (s *AuthServer) VerifyEmail(
