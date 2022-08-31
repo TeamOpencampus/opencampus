@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package proto.user.v1;
+
+option go_package = "opencampus/gen/proto/user/v1;userv1";
+
+service UserService {
+  rpc Me(MeRequest) returns (MeResponse);
+  rpc Institutes(InstitutesRequest) returns (InstitutesResponse);
+  rpc JoinInstitute(JoinInstituteRequest) returns (JoinInstituteResponse);
+  rpc Jobs(JobsRequest) returns (JobsResponse);
+  rpc JobById(JobByIdRequest) returns (JobByIdResponse);
+
+  rpc Apply(ApplyRequest) returns (ApplyResponse);
+  rpc Retract(RetractRequest) returns (RetractResponse);
+}
+
+message MeRequest {}
+message MeResponse {}
+
+message InstitutesRequest {}
+message InstitutesResponse {}
+
+message JoinInstituteRequest {}
+message JoinInstituteResponse {}
+
+message JobsRequest {}
+message JobsResponse {}
+
+message JobByIdRequest {}
+message JobByIdResponse {}
+
+message ApplyRequest {}
+message ApplyResponse {}
+
+message RetractRequest {}
+
+message RetractResponse {}
