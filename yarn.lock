@@ -1353,12 +1353,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^2.8.8":
-  version: 2.8.8
-  resolution: "@hookform/resolvers@npm:2.8.8"
+"@hookform/resolvers@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@hookform/resolvers@npm:3.1.0"
   peerDependencies:
     react-hook-form: ^7.0.0
-  checksum: 3de8b00ba3d085cd29b8d9d41bb17f5e31a483e46dafef98a37d898fbf5f3d19a74729e1cda8d15d7513486b5886ea12fbef0c1aa4ed009e3cf3c804cbe325a2
+  checksum: 8f6690e514e645dd2a38baf573e7a62a9555c95d6a27f84216be7b3ae4cdc1c09111d6f7a38250612e46aa9d562ccec63db9306ec179156381583b444bf552c2
   languageName: node
   linkType: hard
 
@@ -2987,7 +2987,7 @@ __metadata:
     "@ebay/nice-modal-react": ^1.2.6
     "@emotion/react": ^11
     "@emotion/styled": ^11
-    "@hookform/resolvers": ^2.8.8
+    "@hookform/resolvers": ^3.1.0
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
     "@types/react-table": ^7.7.12
